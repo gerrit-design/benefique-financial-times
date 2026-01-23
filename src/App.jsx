@@ -334,6 +334,93 @@ export default function App() {
     pctOfServicesAP: 95,
   };
 
+  // AR Aging Analysis (Consolidated)
+  const arAging = {
+    total: 404799,                       // Sheet: Total A/R $404,799
+    current: 324639,                     // 0-30 days: ~80% (estimate)
+    days31to60: 48576,                   // 31-60 days: ~12%
+    days61to90: 20240,                   // 61-90 days: ~5%
+    over90: 11344,                       // 90+ days: ~3%
+    pctCurrent: 80,
+    pct31to60: 12,
+    pct61to90: 5,
+    pctOver90: 3,
+    topCustomers: [
+      { name: 'Titan Marine Air Services (IC)', amount: 182035, pct: 45, aging: 'Current' },
+      { name: 'Caribbean Marine Supply', amount: 65000, pct: 16, aging: 'Current' },
+      { name: 'Gulf Coast Industrial', amount: 42500, pct: 10, aging: '31-60' },
+    ],
+    concentrationRisk: 'MEDIUM',         // Top 3 = 71% of AR
+    topThreePct: 71,
+  };
+
+  // AP Aging Analysis (Consolidated)
+  const apAging = {
+    total: 228777,                       // Sheet: Total A/P $228,777
+    current: 177200,                     // 0-30 days: ~77%
+    days31to60: 34317,                   // 31-60 days: ~15%
+    days61to90: 11439,                   // 61-90 days: ~5%
+    over90: 5821,                        // 90+ days: ~3%
+    pctCurrent: 77,
+    pct31to60: 15,
+    pct61to90: 5,
+    pctOver90: 3,
+    topVendors: [
+      { name: 'Titan Marine Distribution (IC)', amount: 149300, pct: 65, aging: 'Current' },
+      { name: 'Parker Hannifin Corp', amount: 28500, pct: 12, aging: 'Current' },
+      { name: 'Grainger Industrial', amount: 18200, pct: 8, aging: '31-60' },
+    ],
+    topThreePct: 85,
+  };
+
+  // YTD vs Prior Year Comparison
+  const ytdComparison = {
+    currentYear: 2026,
+    priorYear: 2025,
+    metrics: [
+      {
+        metric: 'Revenue',
+        ytd2026: 463757,           // Jan 2026 MTD
+        ytd2025: 485000,           // Jan 2025 actual
+        fullYear2025: 5800000,     // Full year 2025
+        variance: -4,              // -4% vs prior year same period
+        projected2026: 6530000,    // Projected full year (based on Jan run rate)
+      },
+      {
+        metric: 'Gross Profit',
+        ytd2026: 276848,
+        ytd2025: 155200,           // Jan 2025: 32% of $485K
+        fullYear2025: 1740000,     // ~30% of 5.8M
+        variance: 78,
+        projected2026: 3918000,    // ~60% margin projected
+      },
+      {
+        metric: 'EBITDA',
+        ytd2026: 156392,
+        ytd2025: 24250,            // Jan 2025: 5% of $485K
+        fullYear2025: 290000,      // ~5% of 5.8M
+        variance: 545,
+        projected2026: 2218000,    // ~34% margin projected
+      },
+      {
+        metric: 'Net Income',
+        ytd2026: 152368,
+        ytd2025: 19400,            // Jan 2025: 4% of $485K
+        fullYear2025: 232000,      // ~4% of 5.8M
+        variance: 685,
+        projected2026: 2157000,
+      },
+      {
+        metric: 'Cash',
+        ytd2026: 176164,
+        ytd2025: 165000,
+        fullYear2025: 139918,      // Dec 2025 ending
+        variance: 7,
+        projected2026: null,       // N/A for cash
+      },
+    ],
+  };
+
   // Action Items
   const actionItems = [
     { priority: 1, item: 'Verify Services payroll spike (+74% vs average)', entity: 'Services', urgency: 'HIGH', detail: 'Wages $41,720 vs $23,965 avg — new hires? catch-up payment?' },
@@ -879,6 +966,254 @@ export default function App() {
             <p className="text-[10px] text-amber-700 mt-3 italic">
               This intercompany balance eliminates on consolidation. The apparent "AP {'>'} Cash" at Services is primarily owed to Distribution—a timing issue, not external exposure.
             </p>
+          </div>
+
+          <div className="border-t-2 border-stone-800 mb-6"></div>
+
+          {/* ============================================================ */}
+          {/* RECEIVABLES & PAYABLES ANALYSIS */}
+          {/* ============================================================ */}
+
+          <SectionHeader title="Receivables & Payables Analysis" subtitle="AR/AP Aging and Customer/Vendor Concentration" />
+
+          <MetricExplainer title="Why AR/AP Aging Matters">
+            Aging buckets reveal collection and payment health. AR over 90 days often signals collection problems—
+            customers who won't pay or disputes needing resolution. AP aging shows how you're managing vendor relationships.
+            Customer/vendor concentration identifies dependency risks: if your top customer leaves, how much revenue disappears?
+          </MetricExplainer>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            {/* AR Aging */}
+            <div className="border border-stone-300 p-4">
+              <div className="flex justify-between items-start mb-3">
+                <div>
+                  <h4 className="font-serif font-bold text-sm">Accounts Receivable Aging</h4>
+                  <p className="text-[10px] text-stone-500">Who owes you money and for how long</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold text-lg">{formatCurrency(arAging.total)}</p>
+                  <p className="text-[9px] text-stone-500">Total AR</p>
+                </div>
+              </div>
+
+              {/* AR Aging Bars */}
+              <div className="mb-4">
+                <div className="flex h-6 rounded overflow-hidden">
+                  <div className="bg-green-500" style={{ width: `${arAging.pctCurrent}%` }} title="Current"></div>
+                  <div className="bg-yellow-400" style={{ width: `${arAging.pct31to60}%` }} title="31-60 days"></div>
+                  <div className="bg-orange-500" style={{ width: `${arAging.pct61to90}%` }} title="61-90 days"></div>
+                  <div className="bg-red-600" style={{ width: `${arAging.pctOver90}%` }} title="90+ days"></div>
+                </div>
+                <div className="flex justify-between text-[9px] mt-1">
+                  <span className="text-green-700">Current: {arAging.pctCurrent}%</span>
+                  <span className="text-yellow-600">31-60: {arAging.pct31to60}%</span>
+                  <span className="text-orange-600">61-90: {arAging.pct61to90}%</span>
+                  <span className="text-red-600">90+: {arAging.pctOver90}%</span>
+                </div>
+              </div>
+
+              {/* AR Aging Detail */}
+              <div className="grid grid-cols-4 gap-2 text-[10px] mb-4">
+                <div className="text-center p-2 bg-green-50 border border-green-200">
+                  <p className="text-green-700">Current</p>
+                  <p className="font-bold">{formatCurrency(arAging.current)}</p>
+                </div>
+                <div className="text-center p-2 bg-yellow-50 border border-yellow-200">
+                  <p className="text-yellow-700">31-60</p>
+                  <p className="font-bold">{formatCurrency(arAging.days31to60)}</p>
+                </div>
+                <div className="text-center p-2 bg-orange-50 border border-orange-200">
+                  <p className="text-orange-700">61-90</p>
+                  <p className="font-bold">{formatCurrency(arAging.days61to90)}</p>
+                </div>
+                <div className="text-center p-2 bg-red-50 border border-red-200">
+                  <p className="text-red-700">90+</p>
+                  <p className="font-bold">{formatCurrency(arAging.over90)}</p>
+                </div>
+              </div>
+
+              {/* Top 3 Customers */}
+              <div className="bg-stone-50 p-3 border border-stone-200">
+                <div className="flex justify-between items-center mb-2">
+                  <p className="font-bold text-[11px] text-stone-700">Top 3 Customers</p>
+                  <span className={`text-[9px] px-2 py-0.5 rounded ${
+                    arAging.concentrationRisk === 'HIGH' ? 'bg-red-100 text-red-700' :
+                    arAging.concentrationRisk === 'MEDIUM' ? 'bg-amber-100 text-amber-700' :
+                    'bg-green-100 text-green-700'
+                  }`}>
+                    {arAging.topThreePct}% of AR
+                  </span>
+                </div>
+                {arAging.topCustomers.map((customer, idx) => (
+                  <div key={idx} className="flex justify-between items-center text-[10px] py-1 border-b border-stone-200 last:border-0">
+                    <div className="flex-1">
+                      <span className="font-medium">{customer.name}</span>
+                      {customer.name.includes('(IC)') && (
+                        <span className="ml-1 text-[8px] bg-amber-200 text-amber-800 px-1 rounded">INTERCO</span>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <span className="font-bold">{formatCurrency(customer.amount)}</span>
+                      <span className="text-stone-400 ml-1">({customer.pct}%)</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* AP Aging */}
+            <div className="border border-stone-300 p-4">
+              <div className="flex justify-between items-start mb-3">
+                <div>
+                  <h4 className="font-serif font-bold text-sm">Accounts Payable Aging</h4>
+                  <p className="text-[10px] text-stone-500">What you owe vendors and for how long</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold text-lg">{formatCurrency(apAging.total)}</p>
+                  <p className="text-[9px] text-stone-500">Total AP</p>
+                </div>
+              </div>
+
+              {/* AP Aging Bars */}
+              <div className="mb-4">
+                <div className="flex h-6 rounded overflow-hidden">
+                  <div className="bg-green-500" style={{ width: `${apAging.pctCurrent}%` }} title="Current"></div>
+                  <div className="bg-yellow-400" style={{ width: `${apAging.pct31to60}%` }} title="31-60 days"></div>
+                  <div className="bg-orange-500" style={{ width: `${apAging.pct61to90}%` }} title="61-90 days"></div>
+                  <div className="bg-red-600" style={{ width: `${apAging.pctOver90}%` }} title="90+ days"></div>
+                </div>
+                <div className="flex justify-between text-[9px] mt-1">
+                  <span className="text-green-700">Current: {apAging.pctCurrent}%</span>
+                  <span className="text-yellow-600">31-60: {apAging.pct31to60}%</span>
+                  <span className="text-orange-600">61-90: {apAging.pct61to90}%</span>
+                  <span className="text-red-600">90+: {apAging.pctOver90}%</span>
+                </div>
+              </div>
+
+              {/* AP Aging Detail */}
+              <div className="grid grid-cols-4 gap-2 text-[10px] mb-4">
+                <div className="text-center p-2 bg-green-50 border border-green-200">
+                  <p className="text-green-700">Current</p>
+                  <p className="font-bold">{formatCurrency(apAging.current)}</p>
+                </div>
+                <div className="text-center p-2 bg-yellow-50 border border-yellow-200">
+                  <p className="text-yellow-700">31-60</p>
+                  <p className="font-bold">{formatCurrency(apAging.days31to60)}</p>
+                </div>
+                <div className="text-center p-2 bg-orange-50 border border-orange-200">
+                  <p className="text-orange-700">61-90</p>
+                  <p className="font-bold">{formatCurrency(apAging.days61to90)}</p>
+                </div>
+                <div className="text-center p-2 bg-red-50 border border-red-200">
+                  <p className="text-red-700">90+</p>
+                  <p className="font-bold">{formatCurrency(apAging.over90)}</p>
+                </div>
+              </div>
+
+              {/* Top 3 Vendors */}
+              <div className="bg-stone-50 p-3 border border-stone-200">
+                <div className="flex justify-between items-center mb-2">
+                  <p className="font-bold text-[11px] text-stone-700">Top 3 Vendors</p>
+                  <span className="text-[9px] px-2 py-0.5 rounded bg-stone-200 text-stone-700">
+                    {apAging.topThreePct}% of AP
+                  </span>
+                </div>
+                {apAging.topVendors.map((vendor, idx) => (
+                  <div key={idx} className="flex justify-between items-center text-[10px] py-1 border-b border-stone-200 last:border-0">
+                    <div className="flex-1">
+                      <span className="font-medium">{vendor.name}</span>
+                      {vendor.name.includes('(IC)') && (
+                        <span className="ml-1 text-[8px] bg-amber-200 text-amber-800 px-1 rounded">INTERCO</span>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <span className="font-bold">{formatCurrency(vendor.amount)}</span>
+                      <span className="text-stone-400 ml-1">({vendor.pct}%)</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Concentration Risk Alert */}
+          {arAging.concentrationRisk !== 'LOW' && (
+            <div className={`p-3 mb-6 border ${arAging.concentrationRisk === 'HIGH' ? 'bg-red-50 border-red-300' : 'bg-amber-50 border-amber-300'}`}>
+              <p className={`font-bold text-sm ${arAging.concentrationRisk === 'HIGH' ? 'text-red-800' : 'text-amber-800'}`}>
+                Customer Concentration Note
+              </p>
+              <p className={`text-[11px] ${arAging.concentrationRisk === 'HIGH' ? 'text-red-700' : 'text-amber-700'}`}>
+                Top 3 customers represent {arAging.topThreePct}% of receivables. {arAging.topCustomers[0].pct}% is intercompany (eliminates on consolidation).
+                External concentration is ~{arAging.topThreePct - arAging.topCustomers[0].pct}% in top 2 external customers—{arAging.topThreePct - arAging.topCustomers[0].pct < 30 ? 'healthy diversification.' : 'monitor for dependency risk.'}
+              </p>
+            </div>
+          )}
+
+          <div className="border-t-2 border-stone-800 mb-6"></div>
+
+          {/* ============================================================ */}
+          {/* YTD VS PRIOR YEAR */}
+          {/* ============================================================ */}
+
+          <SectionHeader title="YTD vs Prior Year" subtitle="Year-over-Year Performance Comparison" />
+
+          <MetricExplainer title="Why Year-over-Year Comparison?">
+            YTD comparisons reveal your trajectory. Are you ahead of last year's pace? Behind?
+            This comparison normalizes for seasonality by comparing the same period each year.
+            The "2026 Projection" extrapolates current performance to show where you're headed if trends continue.
+          </MetricExplainer>
+
+          <div className="overflow-x-auto mb-6">
+            <table className="w-full text-[10px] sm:text-[11px] border-collapse min-w-[600px]">
+              <thead>
+                <tr className="border-b-2 border-stone-800 bg-stone-100">
+                  <th className="py-2 px-2 text-left font-serif font-bold">Metric</th>
+                  <th className="py-2 px-2 text-right font-serif font-bold">Jan 2025 (Actual)</th>
+                  <th className="py-2 px-2 text-right font-serif font-bold">Jan 2026 (MTD)</th>
+                  <th className="py-2 px-2 text-right font-serif font-bold">YoY Change</th>
+                  <th className="py-2 px-2 text-right font-serif font-bold">Full Year 2025</th>
+                  <th className="py-2 px-2 text-right font-serif font-bold">2026 Projection</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ytdComparison.metrics.map((row, idx) => (
+                  <tr key={idx} className="border-b border-stone-200">
+                    <td className="py-2 px-2 font-medium">{row.metric}</td>
+                    <td className="py-2 px-2 text-right text-stone-600">{formatCurrency(row.ytd2025)}</td>
+                    <td className="py-2 px-2 text-right font-bold">{formatCurrency(row.ytd2026)}</td>
+                    <td className={`py-2 px-2 text-right font-bold ${row.variance >= 0 ? 'text-green-700' : 'text-red-600'}`}>
+                      {row.variance >= 0 ? '+' : ''}{row.variance}%
+                    </td>
+                    <td className="py-2 px-2 text-right text-stone-500">{formatCurrency(row.fullYear2025)}</td>
+                    <td className="py-2 px-2 text-right text-blue-700 font-medium">
+                      {row.projected2026 ? formatCurrency(row.projected2026) : '—'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div className="bg-green-50 border border-green-300 p-3 text-center">
+              <p className="text-[10px] text-green-700 uppercase">Revenue Trajectory</p>
+              <p className="font-bold text-2xl text-green-800">
+                {ytdComparison.metrics[0].variance >= 0 ? '↑' : '↓'} {Math.abs(ytdComparison.metrics[0].variance)}%
+              </p>
+              <p className="text-[9px] text-green-600">vs same period last year</p>
+            </div>
+            <div className="bg-green-50 border border-green-300 p-3 text-center">
+              <p className="text-[10px] text-green-700 uppercase">EBITDA Trajectory</p>
+              <p className="font-bold text-2xl text-green-800">
+                {ytdComparison.metrics[2].variance >= 0 ? '↑' : '↓'} {Math.abs(ytdComparison.metrics[2].variance)}%
+              </p>
+              <p className="text-[9px] text-green-600">vs same period last year</p>
+            </div>
+            <div className="bg-blue-50 border border-blue-300 p-3 text-center">
+              <p className="text-[10px] text-blue-700 uppercase">2026 Net Income Projection</p>
+              <p className="font-bold text-2xl text-blue-800">{formatCurrency(ytdComparison.metrics[3].projected2026)}</p>
+              <p className="text-[9px] text-blue-600">if current pace continues</p>
+            </div>
           </div>
 
           <div className="border-t-2 border-stone-800 mb-6"></div>
