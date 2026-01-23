@@ -25,7 +25,7 @@ export default function App() {
     currentYear: 2026,
     currentDay: 22,
     daysInMonth: 31,
-    dataSource: 'QuickBooks via g-accon',
+    dataSource: 'Client Accounting System',
     lastSync: '2026-01-22 03:38:59',
     isMultiEntity: true,
   };
@@ -1074,16 +1074,25 @@ export default function App() {
 
           <div className="mb-6">
             {actionItems.map((item, idx) => (
-              <div key={idx} className={`flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-3 p-3 mb-2 border-l-4 ${
+              <div key={idx} className={`flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-3 p-3 mb-3 border-l-4 ${
                 item.urgency === 'HIGH' ? 'border-red-500 bg-red-50' :
                 item.urgency === 'MEDIUM' ? 'border-amber-500 bg-amber-50' :
                 'border-stone-300 bg-stone-50'
               }`}>
                 <span className="font-bold text-stone-400 text-lg">#{item.priority}</span>
                 <div className="flex-1">
-                  <p className="font-medium text-sm">{item.item}</p>
-                  <p className="text-[10px] text-stone-600 mt-1">{item.detail}</p>
-                  <p className="text-[9px] text-stone-400 mt-1">Entity: {item.entity}</p>
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <p className="font-medium text-sm">{item.item}</p>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                      item.entity === 'Distribution' ? 'bg-blue-900 text-white' :
+                      item.entity === 'Services' ? 'bg-green-800 text-white' :
+                      item.entity === 'Both' ? 'bg-purple-700 text-white' :
+                      'bg-stone-600 text-white'
+                    }`}>
+                      {item.entity === 'Both' ? 'BOTH ENTITIES' : item.entity.toUpperCase()}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-stone-600 mt-1">{item.detail}</p>
                 </div>
                 <span className={`self-start text-[9px] font-bold px-2 py-1 rounded ${
                   item.urgency === 'HIGH' ? 'bg-red-200 text-red-800' :
@@ -1105,7 +1114,7 @@ export default function App() {
               <div>
                 <p className="font-bold text-stone-700">The Benefique Financial Times</p>
                 <p>Published by Benefique Fractional CFO Services</p>
-                <p className="mt-1">© 2026 Benefique LLC. All rights reserved.</p>
+                <p className="mt-1">© 2026 Benefique Capital LLC. All rights reserved.</p>
               </div>
               <div className="md:text-right">
                 <p><strong>Data Source:</strong> {CONFIG.dataSource}</p>
