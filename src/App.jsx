@@ -16,7 +16,7 @@ export default function App() {
     clientName: 'Titan Group',
     clientSubtitle: 'Titan Marine Distribution LLC + Titan Marine Air Services LLC',
     industry: 'Marine & Industrial Services',
-    location: 'Sint Maarten',
+    location: 'Hollywood, Florida',
     reportDate: 'January 25, 2026',
     editionNumber: 1,
     periodStart: 'February 2025',
@@ -165,9 +165,13 @@ export default function App() {
     ttmNetMarginPct: 7.2,
     ttmEbitda: 547342,
     ttmEbitdaPct: 9,
+    ttmRevenue12MonthsAgo: 5850000,  // TTM revenue ending Jan 2025
+    ttmEbitda12MonthsAgo: 292500,    // TTM EBITDA ending Jan 2025
+    ttmEbitdaPct12MonthsAgo: 5,      // 5% TTM EBITDA margin 12 months ago
     dscr: 7.39,
     dscrPrior: -0.51,
     trueDscr: 1.19,
+    ttmDscr: 1.98,                   // TTM OCF / TTM Debt Service
     debtService: 23066,
     ttmDebtService: 276792,
     ocf: 71990,
@@ -213,14 +217,20 @@ export default function App() {
     { month: 'Jan*', growth: 21, ebitdaMargin: 38, score: 59 },
   ];
 
-  // Enhanced Rule of 40 metrics
+  // Enhanced Rule of 40 metrics (using TTM for stability)
   const ruleOf40Enhanced = {
-    currentScore: 46,
-    yoyRevenueGrowth: -14,  // Current month vs same month last year
-    ttmEbitdaPct: 9,        // TTM EBITDA as % of TTM Revenue
-    threeMonthAvg: 7,       // 3-month moving average of Rule of 40
-    priorThreeMonthAvg: -31, // Previous 3-month average for comparison
-    explanation: "The Rule of 40 combines growth rate and profitability. A score of 40+ indicates a healthy business that balances growth with profit generation. For SMBs, this metric helps assess whether you're scaling sustainably.",
+    // TTM-based metrics (smooths monthly volatility)
+    ttmRevenueGrowth: 8,       // TTM Revenue now vs TTM 12 months ago: (6.3M - 5.85M) / 5.85M = 8%
+    ttmEbitdaPct: 9,           // TTM EBITDA as % of TTM Revenue
+    ttmScore: 17,              // 8% growth + 9% EBITDA = 17
+    // Comparison to prior year TTM
+    ttmRevenueGrowthPrior: 12, // What the TTM growth was 12 months ago
+    ttmEbitdaPctPrior: 5,      // What the TTM EBITDA% was 12 months ago
+    ttmScorePrior: 17,         // Prior TTM Rule of 40 score
+    // Monthly (for reference, but volatile)
+    monthlyScore: 59,          // Current month's snapshot (volatile)
+    threeMonthAvg: 7,          // 3-month moving average of monthly scores
+    explanation: "The Rule of 40 combines revenue growth rate and EBITDA margin. We use TTM (Trailing Twelve Month) figures to smooth out monthly volatility. A TTM-based score provides a more accurate picture of sustainable performance than any single month.",
   };
 
   // Weekly Cash Trend (last 12 weeks for display, can extend to 60 months)
@@ -592,12 +602,12 @@ export default function App() {
                 </div>
                 <div>
                   <StatBox
-                    label="DSCR"
-                    value={`${consolidated.dscr.toFixed(2)}x`}
-                    subtext="Debt Service Coverage"
-                    status={consolidated.dscr >= 1.25 ? 'GREEN' : consolidated.dscr >= 1.0 ? 'YELLOW' : 'RED'}
+                    label="TTM DSCR"
+                    value={`${consolidated.ttmDscr.toFixed(2)}x`}
+                    subtext="Trailing 12-Month Coverage"
+                    status={consolidated.ttmDscr >= 1.25 ? 'GREEN' : consolidated.ttmDscr >= 1.0 ? 'YELLOW' : 'RED'}
                   />
-                  <p className="text-[9px] text-stone-500 mt-1 px-1">Operating cash flow ÷ debt payments. Banks want 1.25x+.</p>
+                  <p className="text-[9px] text-stone-500 mt-1 px-1">TTM operating cash ÷ TTM debt payments. Banks want 1.25x+.</p>
                 </div>
                 <div>
                   <StatBox
@@ -730,11 +740,11 @@ export default function App() {
                   <p className="text-[10px] text-green-400">vs {consolidated.ebitdaPriorPct}% prior</p>
                 </div>
                 <div className="bg-stone-800 text-white p-3 text-center">
-                  <p className="text-[9px] uppercase tracking-wide opacity-70">Combined DSCR</p>
-                  <p className={`text-xl sm:text-2xl font-bold ${consolidated.dscr >= 1.25 ? 'text-green-400' : consolidated.dscr >= 1.0 ? 'text-amber-400' : 'text-red-400'}`}>
-                    {consolidated.dscr.toFixed(2)}x
+                  <p className="text-[9px] uppercase tracking-wide opacity-70">TTM DSCR</p>
+                  <p className={`text-xl sm:text-2xl font-bold ${consolidated.ttmDscr >= 1.25 ? 'text-green-400' : consolidated.ttmDscr >= 1.0 ? 'text-amber-400' : 'text-red-400'}`}>
+                    {consolidated.ttmDscr.toFixed(2)}x
                   </p>
-                  <p className="text-[10px] opacity-70">debt service coverage</p>
+                  <p className="text-[10px] opacity-70">trailing 12-month coverage</p>
                 </div>
               </div>
 
@@ -915,47 +925,64 @@ export default function App() {
             </div>
           </div>
 
-          {/* Enhanced Rule of 40 Breakdown */}
+          {/* Enhanced Rule of 40 Breakdown - TTM Based */}
           <div className="bg-gradient-to-r from-stone-50 to-stone-100 border border-stone-300 p-4 mb-6">
             <div className="flex flex-col md:flex-row md:items-start gap-4">
               <div className="md:w-1/3">
-                <h4 className="font-serif font-bold text-lg mb-2">Rule of 40 Explained</h4>
+                <h4 className="font-serif font-bold text-lg mb-2">Rule of 40 (TTM Basis)</h4>
                 <p className="text-[11px] text-stone-600 leading-relaxed">{ruleOf40Enhanced.explanation}</p>
+                <div className="mt-2 p-2 bg-amber-50 border border-amber-200 text-[9px] text-amber-800">
+                  <strong>Why TTM?</strong> Monthly scores swing wildly (this month: {ruleOf40Enhanced.monthlyScore}). TTM shows the real trend.
+                </div>
               </div>
-              <div className="md:w-2/3 grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="bg-white p-3 border border-stone-200 text-center">
-                  <p className="text-[9px] uppercase text-stone-500 mb-1">YOY Revenue Growth</p>
-                  <p className={`text-2xl font-bold ${ruleOf40Enhanced.yoyRevenueGrowth >= 0 ? 'text-green-700' : 'text-red-600'}`}>
-                    {ruleOf40Enhanced.yoyRevenueGrowth > 0 ? '+' : ''}{ruleOf40Enhanced.yoyRevenueGrowth}%
-                  </p>
-                  <p className="text-[9px] text-stone-400">vs same month last year</p>
+              <div className="md:w-2/3">
+                {/* TTM Current vs Prior Comparison */}
+                <div className="grid grid-cols-3 gap-3 mb-3">
+                  <div className="bg-white p-3 border border-stone-200 text-center">
+                    <p className="text-[9px] uppercase text-stone-500 mb-1">TTM Revenue Growth</p>
+                    <p className={`text-2xl font-bold ${ruleOf40Enhanced.ttmRevenueGrowth >= 0 ? 'text-green-700' : 'text-red-600'}`}>
+                      {ruleOf40Enhanced.ttmRevenueGrowth > 0 ? '+' : ''}{ruleOf40Enhanced.ttmRevenueGrowth}%
+                    </p>
+                    <p className="text-[9px] text-stone-400">vs TTM 12 months ago</p>
+                  </div>
+                  <div className="bg-white p-3 border border-stone-200 text-center">
+                    <p className="text-[9px] uppercase text-stone-500 mb-1">TTM EBITDA Margin</p>
+                    <p className={`text-2xl font-bold ${ruleOf40Enhanced.ttmEbitdaPct >= 10 ? 'text-green-700' : ruleOf40Enhanced.ttmEbitdaPct >= 0 ? 'text-amber-600' : 'text-red-600'}`}>
+                      {ruleOf40Enhanced.ttmEbitdaPct}%
+                    </p>
+                    <p className="text-[9px] text-stone-400">trailing 12 months</p>
+                  </div>
+                  <div className="bg-white p-3 border-2 border-stone-400 text-center">
+                    <p className="text-[9px] uppercase text-stone-500 mb-1">TTM Rule of 40</p>
+                    <p className={`text-2xl font-bold ${ruleOf40Enhanced.ttmScore >= 40 ? 'text-green-700' : ruleOf40Enhanced.ttmScore >= 25 ? 'text-amber-600' : 'text-red-600'}`}>
+                      {ruleOf40Enhanced.ttmScore}
+                    </p>
+                    <p className="text-[9px] text-stone-400">Growth% + EBITDA%</p>
+                  </div>
                 </div>
-                <div className="bg-white p-3 border border-stone-200 text-center">
-                  <p className="text-[9px] uppercase text-stone-500 mb-1">TTM EBITDA Margin</p>
-                  <p className={`text-2xl font-bold ${ruleOf40Enhanced.ttmEbitdaPct >= 10 ? 'text-green-700' : ruleOf40Enhanced.ttmEbitdaPct >= 0 ? 'text-amber-600' : 'text-red-600'}`}>
-                    {ruleOf40Enhanced.ttmEbitdaPct}%
-                  </p>
-                  <p className="text-[9px] text-stone-400">trailing 12 months</p>
-                </div>
-                <div className="bg-white p-3 border border-stone-200 text-center">
-                  <p className="text-[9px] uppercase text-stone-500 mb-1">Current Score</p>
-                  <p className={`text-2xl font-bold ${ruleOf40Enhanced.currentScore >= 40 ? 'text-green-700' : ruleOf40Enhanced.currentScore >= 25 ? 'text-amber-600' : 'text-red-600'}`}>
-                    {ruleOf40Enhanced.currentScore}
-                  </p>
-                  <p className="text-[9px] text-stone-400">Growth + EBITDA%</p>
-                </div>
-                <div className="bg-white p-3 border border-stone-200 text-center">
-                  <p className="text-[9px] uppercase text-stone-500 mb-1">3-Month Average</p>
-                  <p className={`text-2xl font-bold ${ruleOf40Enhanced.threeMonthAvg >= 40 ? 'text-green-700' : ruleOf40Enhanced.threeMonthAvg >= 25 ? 'text-amber-600' : 'text-red-600'}`}>
-                    {ruleOf40Enhanced.threeMonthAvg}
-                  </p>
-                  <p className="text-[9px] text-stone-400">smooths volatility</p>
+                {/* Prior Year Comparison */}
+                <div className="bg-stone-100 p-2 rounded text-[10px]">
+                  <p className="font-bold text-stone-600 mb-1">Same TTM Period Last Year</p>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div>
+                      <p className="text-stone-500">TTM Growth</p>
+                      <p className="font-bold">{ruleOf40Enhanced.ttmRevenueGrowthPrior}%</p>
+                    </div>
+                    <div>
+                      <p className="text-stone-500">TTM EBITDA%</p>
+                      <p className="font-bold">{ruleOf40Enhanced.ttmEbitdaPctPrior}%</p>
+                    </div>
+                    <div>
+                      <p className="text-stone-500">TTM Score</p>
+                      <p className="font-bold">{ruleOf40Enhanced.ttmScorePrior}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="mt-3 p-2 bg-blue-50 border border-blue-200 text-[10px] text-blue-800">
-              <strong>Reading this:</strong> Your current score of {ruleOf40Enhanced.currentScore} {ruleOf40Enhanced.currentScore >= 40 ? 'exceeds' : 'is below'} the target of 40.
-              The 3-month average of {ruleOf40Enhanced.threeMonthAvg} (vs prior {ruleOf40Enhanced.priorThreeMonthAvg}) shows the trend direction, smoothing out month-to-month noise.
+              <strong>Reading this:</strong> Your TTM Rule of 40 score of {ruleOf40Enhanced.ttmScore} (8% revenue growth + 9% EBITDA margin) {ruleOf40Enhanced.ttmScore >= 40 ? 'exceeds' : 'is below'} the target of 40.
+              Compared to the same TTM period last year ({ruleOf40Enhanced.ttmScorePrior}), the EBITDA margin has improved from {ruleOf40Enhanced.ttmEbitdaPctPrior}% to {ruleOf40Enhanced.ttmEbitdaPct}%, while growth has moderated from {ruleOf40Enhanced.ttmRevenueGrowthPrior}% to {ruleOf40Enhanced.ttmRevenueGrowth}%.
             </div>
           </div>
 
