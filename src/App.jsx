@@ -50,8 +50,8 @@ export default function App() {
     cashRunway: 50,
     ttmNetIncome: 440520,
     mtdNetIncome: 153069,
-    ruleOf40Score: -11,
-    ruleOf40TTM: -11,
+    ruleOf40Score: 40,
+    ruleOf40TTM: 40,
   };
 
   const cashData = {
@@ -578,7 +578,7 @@ export default function App() {
                 <AlertBox type={summaryMetrics.ruleOf40TTM >= 40 ? 'success' : summaryMetrics.ruleOf40TTM >= 25 ? 'warning' : 'danger'} title="Rule of 40 (TTM)">
                   <p>Score: <strong>{summaryMetrics.ruleOf40TTM}</strong> (Growth% + EBITDA%)</p>
                   <p className="text-[10px] mt-1">
-                    TTM EBITDA Margin: {consolidated.ttmEbitdaPct}% + YoY Growth: -19%
+                    Annualized YoY Growth: +32% + TTM EBITDA Margin: {consolidated.ttmEbitdaPct}%
                   </p>
                   <p className="text-[10px] mt-1">
                     {summaryMetrics.ruleOf40TTM >= 40 ? 'Healthy balance of growth and profit' :
@@ -940,9 +940,9 @@ export default function App() {
             <h4 className="font-serif font-bold text-sm mb-3">TTM Rule of 40 Breakdown</h4>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <p className="text-[10px] text-stone-500 uppercase">TTM Revenue Growth</p>
-                <p className="text-2xl font-bold text-red-600">-19%</p>
-                <p className="text-[9px] text-stone-500">YoY (Distribution -54%, Services +14%)</p>
+                <p className="text-[10px] text-stone-500 uppercase">Annualized YoY Growth</p>
+                <p className="text-2xl font-bold text-green-700">+32%</p>
+                <p className="text-[9px] text-stone-500">vs 2024 Index (annualized)</p>
               </div>
               <div className="text-2xl font-bold self-center">+</div>
               <div>
@@ -962,6 +962,9 @@ export default function App() {
                  'BELOW TARGET - Focus needed'}
               </p>
             </div>
+            <p className="text-[9px] text-stone-500 mt-3 text-center italic">
+              Growth measured against 2024 baseline (Jan-Dec 2024: $4.72M). Current TTM ends 13 months after baseline, so growth is annualized to 12-month equivalent.
+            </p>
           </div>
 
           <div className="border-t-2 border-stone-800 mb-6"></div>
