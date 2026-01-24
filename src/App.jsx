@@ -2,8 +2,8 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, ReferenceLine, Area, AreaChart, ComposedChart } from 'recharts';
 
 // ============================================================
-// THE BENEFIQUE FINANCIAL TIMES - TITAN GROUP EDITION
-// Week of January 25, 2026
+// THE BENEFIQUE FINANCIAL TIMES - TITAN GROUP
+// Edition: January 24, 2026
 // ============================================================
 
 export default function App() {
@@ -14,419 +14,296 @@ export default function App() {
 
   const CONFIG = {
     clientName: 'Titan Group',
-    clientSubtitle: 'Titan Marine Distribution LLC + Titan Marine Air Services LLC',
+    clientSlug: 'titan',
     industry: 'Marine & Industrial Services',
     location: 'Hollywood, Florida',
-    reportDate: 'January 25, 2026',
-    editionNumber: 1,
+    reportDate: 'January 24, 2026',
+    editionNumber: 2,
     periodStart: 'February 2025',
     periodEnd: 'January 2026',
-    currentMonth: 'January',
-    currentYear: 2026,
-    currentDay: 23,
+    currentDay: 24,
     daysInMonth: 31,
-    dataSource: 'Client Accounting System',
-    lastSync: '2026-01-23 03:23:21',  // From Titan Group Financial Center
     isMultiEntity: true,
+    entities: ['Distribution', 'Services'],
+    hasConsolidated: true,
+    primaryColor: '#1e3a5f',
+    secondaryColor: '#166534',
+    alertColor: '#dc2626',
+    dataSource: 'QuickBooks via g-accon',
+    lastSync: '2026-01-24 06:22:13',
+    spreadsheetIds: {
+      distribution: '1RfTsvuqxoFYgk5Jd4JVuyIUlToug9y7bbtsTWheDFew',
+      services: '1QEqKj0bS3pD71uH2Z-Ae0cFVLY3rr2HnPKHI9S3yP7E',
+      consolidated: '1i2c7Dq93gGAJSc2Df7JoiG5gWc3loX8oGJJIuAiQyeA',
+    },
   };
 
   const monthProgress = Math.round((CONFIG.currentDay / CONFIG.daysInMonth) * 100);
 
   // ============================================================
-  // REAL DATA FROM TITAN CONSOLIDATED SHEET
+  // DATA - January 24, 2026
   // ============================================================
 
-  // Executive Summary (from Titan Group Financial Center - Jan 23, 2026)
   const summaryMetrics = {
     overallStatus: 'GREEN',
-    statusReason: 'Healthy Combined Business',
-    cashRunway: 16,  // $176,164 / ($6,317,511/365) = ~10 days based on TTM revenue run rate
-    ttmNetIncome: 439819,  // Sheet: TTM Net Income
-    mtdNetIncome: 152368,  // Sheet: YTD Net Income (Jan MTD)
-    ruleOf40Score: 17,  // TTM-based: 8% TTM EBITDA% + ~9% TTM growth estimate
+    statusReason: 'Strong January Performance',
+    cashRunway: 50,
+    ttmNetIncome: 440520,
+    mtdNetIncome: 153069,
+    ruleOf40Score: 17,
+    ruleOf40TTM: 17,
   };
 
-  // Cash Position (from Titan Group Financial Center - Jan 23, 2026)
   const cashData = {
-    current: 176164,   // Sheet: CONSOLIDATED Bank
-    prior: 139918,     // Sheet: Dec 31 Bank
-    change: 36245,     // Sheet: MOM Change ($176,164 - $139,918)
-    changePct: 26,     // 36,245 / 139,918 = 26%
-    daysOnHand: 16,    // Cash / COGS per day: $176,164 / $10,791 = 16 days
+    current: 193031,
+    prior: 139918,
+    change: 53113,
+    changePct: 38,
+    daysOnHand: 50,
     trend: [
-      { week: 'Dec 27', cash: 139918 },
-      { week: 'Jan 3', cash: 119984 },
-      { week: 'Jan 10', cash: 155000 },
-      { week: 'Jan 17', cash: 168000 },
-      { week: 'Jan 23', cash: 176164 },
+      { week: 'Dec 27', cash: 166675 },
+      { week: 'Jan 3', cash: 119415 },
+      { week: 'Jan 10', cash: 188960 },
+      { week: 'Jan 17', cash: 179300 },
+      { week: 'Jan 24', cash: 193031 },
     ],
   };
 
-  // Entity Data (from Titan Group Financial Center - Jan 23, 2026)
   const entityData = [
     {
       name: 'Distribution',
-      fullName: 'Titan Marine Distribution LLC',
-      status: 'GREEN',
-      statusNote: 'Inventory-heavy, stable margins',
-      cash: 74432,           // Sheet: Bank $74,432
-      cashPrior: 32967,      // Sheet: Dec Bank $32,967
-      cashChange: 41465,     // Sheet: MOM Change $41,465
-      revenue: 165628,       // Sheet: Total Income $165,628
-      revenuePrior: 253638,  // Sheet: Dec Total Income $253,638
-      revenueMoM: -35,       // -36% per sheet
-      revenueProjected: 233000, // Estimated projection
-      grossProfit: 73684,    // Sheet: Gross Profit $73,684
-      grossMarginPct: 44,    // Sheet: GP% 44%
-      grossMarginPriorPct: 39, // Sheet: Dec GP% 39%
-      ebitda: 33340,         // Sheet: Net Operating Income $33,340
-      ebitdaPct: 20,         // Sheet: EBITDA% 20%
-      ebitdaPriorPct: 9,     // Sheet: Dec EBITDA% 9%
-      netIncome: 29381,      // Sheet: YTD Net Income
-      ttmRevenue: 3109564,   // Sheet: TTM Total Income $3,109,564
-      ttmNetIncome: 338321,  // Sheet: TTM Net Income $338,321
-      ttmEbitda: 347499,     // Sheet: TTM Net Operating Income $347,499
-      ttmEbitdaPct: 11,      // Sheet: TTM EBITDA% 11%
-      ttmDscr: 2.51,         // Sheet: TTM DSCR 2.51
-      dscr: 2.89,            // Monthly: $33,340 / $11,533 = 2.89
-      dscrPrior: 1.94,
-      debtService: 11533,    // Sheet: Debt Service $11,533
-      ttmDebtService: 138396, // Sheet: TTM Debt Service $138,396
-      ocf: 46620,            // Sheet: OCF $46,620
-      ocfPrior: -97345,
-      dso: 17,               // Sheet: DSO 17
-      dio: 87,               // Sheet: DIO 87
-      dpo: 23,               // Sheet: DPO 23
-      ccc: 80,               // Sheet: CCC 80
-      ar: 275811,            // Sheet: A/R $275,811
-      arPrior: 285562,
-      ap: 71619,             // Sheet: A/P $71,619
-      apPrior: 82405,
-      inventory: 544803,     // Sheet: Inventory $544,803
-      creditCards: 29555,    // Sheet: Credit Cards $29,555
-      breakEvenRevenue: 213624, // Sheet: TTM Average Break-Even $213,624
+      status: 'YELLOW',
+      statusNote: 'Revenue down 35% MoM',
+      cash: 75742,
+      revenue: 168320,
+      revenueProjected: 217510,
+      revenuePrior: 253638,
+      ebitda: 23273,
+      ebitdaPct: 14,
+      grossMarginPct: 38,
+      dscr: 2.44,
+      dso: 17,
+      dio: 86,
+      dpo: 23,
+      ccc: 80,
+      ar: 277160,
+      ap: 84299,
+      inventory: 544797,
+      ttmRevenue: 3112257,
+      ttmNetIncome: 328253,
     },
     {
       name: 'Services',
-      fullName: 'Titan Marine Air Services LLC',
-      status: 'YELLOW',
-      statusNote: 'AP > Cash (95% intercompany)',
-      cash: 101732,          // Sheet: Bank $101,732
-      cashPrior: 106951,     // Sheet: Dec Bank $106,951
-      cashChange: -5219,     // Sheet: MOM Change -$5,219 (CASH DOWN)
-      revenue: 298130,       // Sheet: Total Income $298,130
-      revenuePrior: 269217,  // Sheet: Dec Total Income $269,217
-      revenueMoM: 11,        // +11% per sheet
-      revenueProjected: 420000, // Estimated projection
-      grossProfit: 203164,   // Sheet: Gross Profit $203,164
-      grossMarginPct: 68,    // Sheet: GP% 68%
-      grossMarginPriorPct: 31, // Sheet: Dec GP% 31%
-      ebitda: 123052,        // Sheet: Net Operating Income $123,052
-      ebitdaPct: 41,         // Sheet: EBITDA% 41%
-      ebitdaPriorPct: -13,   // Sheet: Dec EBITDA% -13%
-      netIncome: 122987,     // Sheet: YTD Net Income
-      ttmRevenue: 3207947,   // Sheet: TTM Total Income $3,207,947
-      ttmNetIncome: 101499,  // Sheet: TTM Net Income $101,499
-      ttmEbitda: 185741,     // Sheet: TTM Net Operating Income $185,741
-      ttmEbitdaPct: 6,       // Sheet: TTM EBITDA% 6%
-      ttmDscr: 1.34,         // Sheet: TTM DSCR 1.34
-      dscr: 10.67,           // Monthly: $123,052 / $11,533 = 10.67
-      dscrPrior: -2.95,
-      debtService: 11533,    // Sheet: Debt Service $11,533
-      ttmDebtService: 138396, // Sheet: TTM Debt Service $138,396
-      ocf: 9440,             // Sheet: OCF $9,440
-      ocfPrior: 17598,
-      dso: 14,               // Sheet: DSO 14
-      dio: 4,                // Sheet: DIO 4
-      dpo: 20,               // Sheet: DPO 20
-      ccc: -3,               // Sheet: CCC -3 (negative = good!)
-      ar: 128988,            // Sheet: A/R $128,988
-      arPrior: 72615,
-      ap: 157158,            // Sheet: A/P $157,158
-      apPrior: 208257,
-      inventory: 43268,      // Sheet: Inventory $43,268
-      creditCards: 10526,    // Sheet: Credit Cards $10,526
-      breakEvenRevenue: 256676, // Sheet: TTM Average Break-Even $256,676
+      status: 'GREEN',
+      statusNote: 'Revenue up 16% MoM',
+      cash: 117289,
+      revenue: 311386,
+      revenueProjected: 402466,
+      revenuePrior: 269217,
+      ebitda: 133820,
+      ebitdaPct: 43,
+      grossMarginPct: 69,
+      dscr: 1.42,
+      dso: 13,
+      dio: 4,
+      dpo: 20,
+      ccc: -3,
+      ar: 125553,
+      ap: 159656,
+      inventory: 44618,
+      ttmRevenue: 3221203,
+      ttmNetIncome: 112267,
     },
   ];
 
-  // Consolidated Metrics (from Titan Group Financial Center - Jan 23, 2026)
   const consolidated = {
-    cash: 176164,            // Sheet: Bank $176,164
-    cashPrior: 139918,       // Sheet: Dec Bank $139,918
-    cashChange: 36245,       // Sheet: MOM Change $36,245
-    revenue: 463757,         // Sheet: Total Income $463,757
-    revenuePrior: 522856,    // Sheet: Dec Total Income $522,856
-    revenueMoM: -11,         // -12% per sheet
-    revenueProjected: 653000, // Estimated projection
-    grossProfit: 276848,     // Sheet: Gross Profit $276,848
-    grossProfitPrior: 181526, // Sheet: Dec GP $181,526
-    grossMarginPct: 60,      // Sheet: GP% 60%
-    grossMarginPriorPct: 35, // Sheet: Dec GP% 35%
-    ebitda: 156392,          // Sheet: EBITDA $156,392
-    ebitdaPrior: -11653,     // Sheet: Dec EBITDA -$11,653
-    ebitdaPct: 34,           // Sheet: EBITDA% 34%
-    ebitdaPriorPct: -2,      // Sheet: Dec EBITDA% -2%
-    netIncome: 152368,       // Sheet: YTD Net Income $152,368
-    ttmRevenue: 6317511,     // Sheet: TTM Total Income $6,317,511
-    ttmNetIncome: 439819,    // Sheet: TTM Net Income $439,819
-    ttmNetMarginPct: 7.0,    // $439,819 / $6,317,511 = 7.0%
-    ttmEbitda: 533240,       // Sheet: TTM EBITDA $533,240
-    ttmEbitdaPct: 8,         // Sheet: TTM EBITDA% 8%
-    // For TTM comparison (12 months ago) - estimated from historical data
-    ttmRevenue12MonthsAgo: 5800000,  // Estimated TTM revenue ending Jan 2025
-    ttmEbitda12MonthsAgo: 290000,    // Estimated TTM EBITDA ending Jan 2025
-    ttmEbitdaPct12MonthsAgo: 5,      // Estimated TTM EBITDA% 12 months ago
-    dscr: 6.78,              // Sheet: Monthly DSCR 6.78 ($156,392 / $23,066)
-    dscrPrior: -0.51,        // Sheet: Dec DSCR -0.51
-    trueDscr: 1.13,          // Sheet: TRUE DSCR (OCF/DS) 1.13
-    ttmDscr: 1.93,           // Sheet: TTM DSCR 1.93 ($533,240 / $276,792)
-    debtService: 23066,      // Sheet: Debt Service $23,066
-    ttmDebtService: 276792,  // Sheet: TTM Debt Service $276,792
-    ocf: 56060,              // Sheet: OCF $56,060
-    ttmOcf: 312531,          // Sheet: TTM OCF $312,531
-    ocfPrior: -79747,
-    dso: 15,                 // Sheet: DSO 15
-    dio: 44,                 // Sheet: DIO 44
-    dpo: 22,                 // Sheet: DPO 22
-    ccc: 38,                 // Sheet: CCC 38 (37 calculated: 15+44-22)
-    ar: 404799,              // Sheet: A/R $404,799
-    arPrior: 358177,
-    ap: 228777,              // Sheet: A/P $228,777
-    apPrior: 290662,
-    inventory: 588070,       // Sheet: Inventory $588,070
-    creditCards: 40081,      // Sheet: Credit Cards $40,081
-    cogsPerDay: 10791,       // Sheet: COGS Per Day $10,791
+    cash: 193031,
+    revenue: 479706,
+    revenueProjected: 619976,
+    revenuePrior: 522856,
+    revenueMoM: -8,
+    grossProfit: 277613,
+    grossMarginPct: 58,
+    ebitda: 157093,
+    ebitdaPct: 33,
+    ebitdaPrior: -11653,
+    netIncome: 153069,
+    ttmRevenue: 6333460,
+    ttmEbitda: 533941,
+    ttmEbitdaPct: 8,
+    ttmNetIncome: 440520,
+    ttmNetMarginPct: 7,
+    dscr: 1.93,
+    trueDscr: 1.19,
+    debtService: 23066,
+    ttmDebtService: 276792,
+    dso: 15,
+    dio: 44,
+    dpo: 22,
+    ccc: 37,
+    ar: 402714,
+    ap: 243955,
+    inventory: 589414,
   };
 
-  // Historical Trend Data (6 months)
+  // Seasonal Comparison - January 2026 vs January 2025
+  const seasonalComparison = {
+    currentMonth: 'January 2026',
+    priorMonth: 'January 2025',
+    metrics: [
+      { metric: 'Revenue', current: 479706, prior: 478095, change: 0.3 },
+      { metric: 'Gross Profit', current: 277613, prior: 152834, change: 81.6 },
+      { metric: 'GP %', current: 58, prior: 32, change: 81.3 },
+      { metric: 'EBITDA', current: 157093, prior: -23566, change: 767 },
+      { metric: 'Cash', current: 193031, prior: 166708, change: 15.8 },
+    ],
+  };
+
   const revenueTrend = [
-    { month: 'Aug', distribution: 195767, services: 280093, total: 475860, label: 'Aug' },
-    { month: 'Sep', distribution: 188074, services: 158400, total: 346474, label: 'Sep' },
-    { month: 'Oct', distribution: 494486, services: 294372, total: 788858, label: 'Oct' },
-    { month: 'Nov', distribution: 308689, services: 281942, total: 590631, label: 'Nov' },
-    { month: 'Dec', distribution: 253638, services: 269217, total: 522855, label: 'Dec' },
-    { month: 'Jan*', distribution: 225681, services: 406355, total: 632036, label: 'Jan*' },
+    { month: 'Aug', distribution: 195767, services: 280093, total: 475860 },
+    { month: 'Sep', distribution: 188074, services: 158400, total: 346474 },
+    { month: 'Oct', distribution: 494486, services: 294372, total: 788858 },
+    { month: 'Nov', distribution: 308689, services: 281942, total: 590631 },
+    { month: 'Dec', distribution: 253638, services: 269217, total: 522855 },
+    { month: 'Jan*', distribution: 217510, services: 402466, total: 619976 },
   ];
 
   const marginTrend = [
-    { month: 'Aug', grossMargin: 30, ebitdaMargin: -2 },
-    { month: 'Sep', grossMargin: 19, ebitdaMargin: -29 },
-    { month: 'Oct', grossMargin: 35, ebitdaMargin: 9 },
-    { month: 'Nov', grossMargin: 30, ebitdaMargin: 0 },
+    { month: 'Aug', grossMargin: 31, ebitdaMargin: -4 },
+    { month: 'Sep', grossMargin: 21, ebitdaMargin: -25 },
+    { month: 'Oct', grossMargin: 38, ebitdaMargin: 14 },
+    { month: 'Nov', grossMargin: 30, ebitdaMargin: -1 },
     { month: 'Dec', grossMargin: 35, ebitdaMargin: -2 },
-    { month: 'Jan*', grossMargin: 60, ebitdaMargin: 34 },  // Sheet: GP% 60%, EBITDA% 34%
+    { month: 'Jan*', grossMargin: 58, ebitdaMargin: 33 },
   ];
 
   const ruleOf40Data = [
-    { month: 'Aug', growth: -19, ebitdaMargin: -2, score: -21 },
-    { month: 'Sep', growth: -27, ebitdaMargin: -29, score: -56 },
-    { month: 'Oct', growth: 128, ebitdaMargin: 9, score: 137 },
-    { month: 'Nov', growth: -25, ebitdaMargin: 0, score: -25 },
+    { month: 'Aug', growth: -19, ebitdaMargin: -4, score: -23 },
+    { month: 'Sep', growth: -27, ebitdaMargin: -25, score: -52 },
+    { month: 'Oct', growth: 128, ebitdaMargin: 14, score: 142 },
+    { month: 'Nov', growth: -25, ebitdaMargin: -1, score: -26 },
     { month: 'Dec', growth: -11, ebitdaMargin: -2, score: -13 },
-    { month: 'Jan*', growth: -12, ebitdaMargin: 34, score: 22 },  // Sheet: -12% MoM, 34% EBITDA
+    { month: 'Jan*', growth: 19, ebitdaMargin: 33, score: 52 },
   ];
 
-  // Enhanced Rule of 40 metrics (using TTM for stability)
-  // TTM Revenue: $6,317,511 | TTM EBITDA: $533,240 | TTM EBITDA%: 8%
-  // TTM Revenue 12mo ago (est): $5,800,000 | TTM Growth: 9%
-  const ruleOf40Enhanced = {
-    // TTM-based metrics (smooths monthly volatility)
-    ttmRevenueGrowth: 9,       // TTM Revenue now vs TTM 12 months ago: (6.32M - 5.8M) / 5.8M = 9%
-    ttmEbitdaPct: 8,           // Sheet: TTM EBITDA% = 8%
-    ttmScore: 17,              // 9% growth + 8% EBITDA = 17
-    // Comparison to prior year TTM (estimated)
-    ttmRevenueGrowthPrior: 12, // Estimated - what the TTM growth was 12 months ago
-    ttmEbitdaPctPrior: 5,      // Estimated - TTM EBITDA% was lower 12 months ago
-    ttmScorePrior: 17,         // Estimated prior TTM Rule of 40 score
-    // Monthly (for reference, but volatile)
-    monthlyScore: 22,          // Current month: -12% MoM revenue + 34% EBITDA% = 22
-    threeMonthAvg: 7,          // 3-month moving average of monthly scores
-    explanation: "The Rule of 40 combines revenue growth rate and EBITDA margin. We use TTM (Trailing Twelve Month) figures to smooth out monthly volatility. A TTM-based score provides a more accurate picture of sustainable performance than any single month.",
-  };
-
-  // Weekly Cash Trend (last 12 weeks for display, can extend to 60 months)
-  // Final values from Titan Group Financial Center - Jan 23, 2026
-  const weeklyCashTrend = [
-    { week: 'Nov 1', date: '2025-11-01', cash: 125000, distribution: 45000, services: 80000 },
-    { week: 'Nov 8', date: '2025-11-08', cash: 118000, distribution: 42000, services: 76000 },
-    { week: 'Nov 15', date: '2025-11-15', cash: 132000, distribution: 52000, services: 80000 },
-    { week: 'Nov 22', date: '2025-11-22', cash: 145000, distribution: 58000, services: 87000 },
-    { week: 'Nov 29', date: '2025-11-29', cash: 138000, distribution: 48000, services: 90000 },
-    { week: 'Dec 6', date: '2025-12-06', cash: 142000, distribution: 52000, services: 90000 },
-    { week: 'Dec 13', date: '2025-12-13', cash: 128000, distribution: 38000, services: 90000 },
-    { week: 'Dec 20', date: '2025-12-20', cash: 135000, distribution: 40000, services: 95000 },
-    { week: 'Dec 27', date: '2025-12-27', cash: 139918, distribution: 32967, services: 106951 },
-    { week: 'Jan 3', date: '2026-01-03', cash: 119984, distribution: 25000, services: 94984 },
-    { week: 'Jan 10', date: '2026-01-10', cash: 155000, distribution: 55000, services: 100000 },
-    { week: 'Jan 17', date: '2026-01-17', cash: 168000, distribution: 68000, services: 100000 },
-    { week: 'Jan 23', date: '2026-01-23', cash: 176164, distribution: 74432, services: 101732 },  // Sheet values
-  ];
-
-  // Seasonal Comparison Data (Current month vs same period last year)
-  const seasonalComparison = {
-    currentMonth: 'January 2026',
-    comparisons: [
-      {
-        period: 'Jan 2025',
-        label: 'Same Month Last Year',
-        revenue: 485000,
-        grossMargin: 32,
-        ebitdaMargin: 5,
-        netIncome: 24250,
-        cash: 165000,
-      },
-      {
-        period: 'Dec 2024',
-        label: 'Month Before (Last Year)',
-        revenue: 520000,
-        grossMargin: 35,
-        ebitdaMargin: 8,
-        netIncome: 41600,
-        cash: 155000,
-      },
-      {
-        period: 'Feb 2025',
-        label: 'Month After (Last Year)',
-        revenue: 445000,
-        grossMargin: 30,
-        ebitdaMargin: 3,
-        netIncome: 13350,
-        cash: 148000,
-      },
-    ],
-    currentPeriod: {
-      period: 'Jan 2026*',
-      label: 'Current (Projected)',
-      revenue: 653000,         // Estimated full-month projection
-      grossMargin: 60,         // Sheet: GP% 60%
-      ebitdaMargin: 34,        // Sheet: EBITDA% 34%
-      netIncome: 214000,       // Estimated full-month projection
-      cash: 176164,            // Sheet: Bank $176,164
+  // AR Aging Data
+  const arAging = {
+    distribution: {
+      current: 0,
+      days1to30: 277160,
+      days31to60: 0,
+      days61to90: 0,
+      days90plus: 1013,
+      total: 278173,
+      intercompany: 262782,
+      intercompanyPct: 94,
     },
-    insight: "January typically shows post-holiday recovery. Current performance significantly exceeds seasonal norms, suggesting operational improvements beyond seasonal factors.",
+    services: {
+      current: 125553,
+      days1to30: 0,
+      days31to60: 0,
+      days61to90: 0,
+      days90plus: 0,
+      total: 125553,
+      intercompany: 0,
+      intercompanyPct: 0,
+    },
   };
 
-  // Expense Spikes
-  const expenseSpikes = [
-    { category: 'Payroll (Wages)', entity: 'Services', current: 41720, average: 23965, variance: 74, status: 'SPIKE', note: 'Verify - new hires or catch-up?' },
-    { category: 'Advertising', entity: 'Services', current: -1709, average: 9016, variance: -119, status: 'REVERSAL', note: 'Refund received' },
+  const topCustomers = [
+    { name: 'Titan Marine Services (IC)', amount: 190842, entity: 'Distribution', isIntercompany: true },
+    { name: 'Titan Marine St Maarten (IC)', amount: 71326, entity: 'Distribution', isIntercompany: true },
+    { name: 'D&C Marine', amount: 5233, entity: 'Distribution', isIntercompany: false },
   ];
 
-  // Owner Draws
+  // AP Aging Data
+  const apAging = {
+    distribution: {
+      current: 81058,
+      days1to30: 3240,
+      days31to60: 0,
+      days61to90: 0,
+      days90plus: 0,
+      total: 84298,
+      intercompany: 0,
+      intercompanyPct: 0,
+    },
+    services: {
+      current: 0,
+      days1to30: 103226,
+      days31to60: 62060,
+      days61to90: 0,
+      days90plus: -5630,
+      total: 159656,
+      intercompany: 155886,
+      intercompanyPct: 98,
+    },
+  };
+
+  const topVendors = [
+    { name: 'Titan Marine Distribution (IC)', amount: 155886, entity: 'Services', isIntercompany: true },
+    { name: 'Frigomar Srl', amount: 80106, entity: 'Distribution', isIntercompany: false },
+    { name: 'SXM Orders', amount: 7628, entity: 'Services', isIntercompany: false },
+  ];
+
+  // YTD vs Prior Year
+  const ytdComparison = {
+    current: {
+      period: 'Jan 2026',
+      revenue: 479706,
+      grossProfit: 277613,
+      ebitda: 157093,
+      netIncome: 153069,
+    },
+    prior: {
+      period: 'Jan 2025',
+      revenue: 478095,
+      grossProfit: 152834,
+      ebitda: -23566,
+      netIncome: -26566,
+    },
+    fullYear: {
+      prior: {
+        year: '2025',
+        revenue: 6424700,
+        netIncome: 440732,
+      },
+      projected: {
+        year: '2026',
+        revenue: 7439712,
+        netIncome: 1836828,
+      },
+    },
+  };
+
+  const expenseSpikes = [
+    { category: 'Payroll (Wages)', entity: 'Services', current: 53116, average: 15048, variance: 253, status: 'SPIKE' },
+    { category: 'Advertising', entity: 'Services', current: -1709, average: 6426, variance: -127, status: 'REVERSAL' },
+    { category: 'Rent & Lease', entity: 'Distribution', current: 1931, average: 12539, variance: -85, status: 'LOW' },
+  ];
+
   const ownerDraws = {
     totalCumulative: 618149,
     mtdTotal: 11233,
-    mtdPctOfIncome: 6.7,
+    mtdPctOfIncome: 7.3,
     partners: [
       { name: 'Francisco', cumulative: 251569, mtd: 1000 },
       { name: 'Ronel', cumulative: 366580, mtd: 10233 },
     ],
   };
 
-  // Intercompany Position (estimated based on Distribution AR $275,811 and Services AP $157,158)
   const intercompany = {
-    distributionARfromServices: 182035,  // ~66% of $275,811
-    servicesAPtoDistribution: 149300,    // ~95% of $157,158
-    netPosition: 32735,                  // $182,035 - $149,300
+    distributionARfromServices: 190842,
+    servicesAPtoDistribution: 155886,
+    netPosition: 34956,
     direction: 'Services owes Distribution',
-    pctOfDistributionAR: 66,
-    pctOfServicesAP: 95,
   };
 
-  // AR Aging Analysis (Consolidated)
-  const arAging = {
-    total: 404799,                       // Sheet: Total A/R $404,799
-    current: 324639,                     // 0-30 days: ~80% (estimate)
-    days31to60: 48576,                   // 31-60 days: ~12%
-    days61to90: 20240,                   // 61-90 days: ~5%
-    over90: 11344,                       // 90+ days: ~3%
-    pctCurrent: 80,
-    pct31to60: 12,
-    pct61to90: 5,
-    pctOver90: 3,
-    topCustomers: [
-      { name: 'Titan Marine Air Services (IC)', amount: 182035, pct: 45, aging: 'Current' },
-      { name: 'Caribbean Marine Supply', amount: 65000, pct: 16, aging: 'Current' },
-      { name: 'Gulf Coast Industrial', amount: 42500, pct: 10, aging: '31-60' },
-    ],
-    concentrationRisk: 'MEDIUM',         // Top 3 = 71% of AR
-    topThreePct: 71,
-  };
-
-  // AP Aging Analysis (Consolidated)
-  const apAging = {
-    total: 228777,                       // Sheet: Total A/P $228,777
-    current: 177200,                     // 0-30 days: ~77%
-    days31to60: 34317,                   // 31-60 days: ~15%
-    days61to90: 11439,                   // 61-90 days: ~5%
-    over90: 5821,                        // 90+ days: ~3%
-    pctCurrent: 77,
-    pct31to60: 15,
-    pct61to90: 5,
-    pctOver90: 3,
-    topVendors: [
-      { name: 'Titan Marine Distribution (IC)', amount: 149300, pct: 65, aging: 'Current' },
-      { name: 'Parker Hannifin Corp', amount: 28500, pct: 12, aging: 'Current' },
-      { name: 'Grainger Industrial', amount: 18200, pct: 8, aging: '31-60' },
-    ],
-    topThreePct: 85,
-  };
-
-  // YTD vs Prior Year Comparison
-  const ytdComparison = {
-    currentYear: 2026,
-    priorYear: 2025,
-    metrics: [
-      {
-        metric: 'Revenue',
-        ytd2026: 463757,           // Jan 2026 MTD
-        ytd2025: 485000,           // Jan 2025 actual
-        fullYear2025: 5800000,     // Full year 2025
-        variance: -4,              // -4% vs prior year same period
-        projected2026: 6530000,    // Projected full year (based on Jan run rate)
-      },
-      {
-        metric: 'Gross Profit',
-        ytd2026: 276848,
-        ytd2025: 155200,           // Jan 2025: 32% of $485K
-        fullYear2025: 1740000,     // ~30% of 5.8M
-        variance: 78,
-        projected2026: 3918000,    // ~60% margin projected
-      },
-      {
-        metric: 'EBITDA',
-        ytd2026: 156392,
-        ytd2025: 24250,            // Jan 2025: 5% of $485K
-        fullYear2025: 290000,      // ~5% of 5.8M
-        variance: 545,
-        projected2026: 2218000,    // ~34% margin projected
-      },
-      {
-        metric: 'Net Income',
-        ytd2026: 152368,
-        ytd2025: 19400,            // Jan 2025: 4% of $485K
-        fullYear2025: 232000,      // ~4% of 5.8M
-        variance: 685,
-        projected2026: 2157000,
-      },
-      {
-        metric: 'Cash',
-        ytd2026: 176164,
-        ytd2025: 165000,
-        fullYear2025: 139918,      // Dec 2025 ending
-        variance: 7,
-        projected2026: null,       // N/A for cash
-      },
-    ],
-  };
-
-  // Action Items
   const actionItems = [
-    { priority: 1, item: 'Verify Services payroll spike (+74% vs average)', entity: 'Services', urgency: 'HIGH', detail: 'Wages $41,720 vs $23,965 avg — new hires? catch-up payment?' },
-    { priority: 2, item: 'Confirm January labor COGS timing', entity: 'Services', urgency: 'MEDIUM', detail: 'January margins may normalize when labor COGS books at month-end' },
-    { priority: 3, item: 'Review intercompany settlement schedule', entity: 'Both', urgency: 'MEDIUM', detail: 'Net $43K owed by Services to Distribution — timing issue' },
-    { priority: 4, item: 'Review Francisco CC balance classification', entity: 'Distribution', urgency: 'LOW', detail: '$1.2M balance needs proper classification review' },
+    { priority: 1, item: 'Investigate Services payroll spike (+253% vs avg) - verify if this includes catch-up or bonus', entity: 'Services', urgency: 'HIGH' },
+    { priority: 2, item: 'Distribution revenue down 35% MoM - verify if timing issue or trend', entity: 'Distribution', urgency: 'MEDIUM' },
+    { priority: 3, item: 'Review Distribution rent ($1.9K vs $12.5K avg) - confirm if partial month or accrual issue', entity: 'Distribution', urgency: 'MEDIUM' },
+    { priority: 4, item: 'Services AP aging: $62K in 31-60 days (intercompany) - schedule settlement', entity: 'Both', urgency: 'LOW' },
   ];
 
   // ============================================================
@@ -441,9 +318,9 @@ export default function App() {
     return `$${value.toFixed(0)}`;
   };
 
-  const formatNumber = (value) => {
+  const formatPercent = (value) => {
     if (value === null || value === undefined) return '—';
-    return value.toLocaleString();
+    return `${value >= 0 ? '+' : ''}${value}%`;
   };
 
   const getStatusColor = (status) => {
@@ -456,11 +333,12 @@ export default function App() {
   };
 
   const getStatusEmoji = (status) => {
-    switch (status) { case 'GREEN': return '🟢'; case 'YELLOW': return '🟡'; case 'RED': return '🔴'; default: return '⚪'; }
-  };
-
-  const getStatusBg = (status) => {
-    switch (status) { case 'GREEN': return 'bg-green-900'; case 'YELLOW': return 'bg-amber-600'; case 'RED': return 'bg-red-700'; default: return 'bg-stone-800'; }
+    switch (status) {
+      case 'GREEN': return '🟢';
+      case 'YELLOW': return '🟡';
+      case 'RED': return '🔴';
+      default: return '⚪';
+    }
   };
 
   // ============================================================
@@ -472,64 +350,41 @@ export default function App() {
       <div className="border-t-2 border-stone-800 mb-2"></div>
       <div className="text-center px-4">
         <p className="text-[10px] tracking-[0.3em] text-stone-600 uppercase mb-1">
-          Benefique Fractional CFO Services • {CONFIG.industry}
+          Benefique Virtual CFO | {CONFIG.industry}
         </p>
-        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-black text-stone-900 tracking-tight" style={{ fontFamily: 'Georgia, Times, serif' }}>
+        <h1 className="font-serif text-4xl md:text-5xl font-black text-stone-900 tracking-tight" style={{ fontFamily: 'Georgia, Times, serif' }}>
           The Benefique Financial Times
         </h1>
-        <p className="text-base sm:text-lg font-serif text-stone-700 mt-1" style={{ fontFamily: 'Georgia, Times, serif' }}>
+        <p className="text-lg font-serif text-stone-700 mt-1" style={{ fontFamily: 'Georgia, Times, serif' }}>
           {CONFIG.clientName} Edition
         </p>
-        <p className="text-[10px] text-stone-500 mt-1">{CONFIG.clientSubtitle}</p>
-        <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 md:gap-8 mt-2 text-[10px] sm:text-[11px] text-stone-600">
+        <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 mt-2 text-[11px] text-stone-600">
           <span>Vol. I, No. {CONFIG.editionNumber}</span>
-          <span className="text-stone-400">•</span>
+          <span className="hidden md:inline text-stone-400">|</span>
           <span className="font-medium">{CONFIG.reportDate}</span>
-          <span className="text-stone-400">•</span>
-          <span>Saturday Edition</span>
-          <span className="hidden sm:inline text-stone-400">•</span>
-          <span className="hidden sm:inline italic">{CONFIG.location}</span>
+          <span className="hidden md:inline text-stone-400">|</span>
+          <span>Friday Edition</span>
+          <span className="hidden md:inline text-stone-400">|</span>
+          <span className="italic">{CONFIG.location}</span>
+        </div>
+        {/* Month Progress Bar */}
+        <div className="mt-3 max-w-md mx-auto">
+          <div className="flex justify-between text-[9px] text-stone-500 mb-1">
+            <span>Month Progress</span>
+            <span>{monthProgress}% ({CONFIG.currentDay}/{CONFIG.daysInMonth} days)</span>
+          </div>
+          <div className="h-2 bg-stone-200 rounded-full overflow-hidden">
+            <div className="h-full bg-stone-700 rounded-full" style={{ width: `${monthProgress}%` }}></div>
+          </div>
         </div>
       </div>
       <div className="border-b border-stone-400 mt-3"></div>
     </div>
   );
 
-  // Educational tooltip/explainer component
-  const MetricExplainer = ({ title, children }) => (
-    <div className="bg-blue-50 border-l-4 border-blue-400 p-3 my-3 text-[11px] text-blue-900">
-      <p className="font-bold text-xs uppercase tracking-wide text-blue-700 mb-1">{title}</p>
-      <p className="leading-relaxed">{children}</p>
-    </div>
-  );
-
-  // Month Progress Badge Component
-  const MonthProgressBadge = () => (
-    <div className="bg-amber-100 border-2 border-amber-500 rounded-lg p-4 mb-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="bg-amber-500 text-white font-bold text-2xl sm:text-3xl px-4 py-2 rounded-lg">
-            {monthProgress}%
-          </div>
-          <div>
-            <p className="font-bold text-amber-900 text-sm sm:text-base">Month In Progress</p>
-            <p className="text-amber-700 text-xs">{CONFIG.currentMonth} {CONFIG.currentDay}, {CONFIG.currentYear} — Day {CONFIG.currentDay} of {CONFIG.daysInMonth}</p>
-          </div>
-        </div>
-        <div className="bg-white border border-amber-300 rounded p-2 text-[10px] text-amber-800 max-w-xs">
-          <p className="font-bold mb-1">Figures Adjusted for Partial Month</p>
-          <p>All MTD numbers have been projected to full-month equivalents for fair comparison. Comparing apples to apples.</p>
-        </div>
-      </div>
-      <div className="w-full bg-amber-200 h-3 rounded-full mt-3">
-        <div className="bg-amber-500 h-3 rounded-full transition-all" style={{ width: `${monthProgress}%` }}></div>
-      </div>
-    </div>
-  );
-
   const SectionHeader = ({ title, subtitle }) => (
     <div className="border-b-2 border-stone-800 mb-4 pb-1">
-      <h2 className="font-serif text-base sm:text-lg font-bold text-stone-900 uppercase tracking-wide" style={{ fontFamily: 'Georgia, Times, serif' }}>
+      <h2 className="font-serif text-lg font-bold text-stone-900 uppercase tracking-wide" style={{ fontFamily: 'Georgia, Times, serif' }}>
         {title}
       </h2>
       {subtitle && <p className="text-[10px] text-stone-500 italic">{subtitle}</p>}
@@ -537,12 +392,12 @@ export default function App() {
   );
 
   const StatBox = ({ label, value, subtext, trend, status }) => (
-    <div className={`text-center p-2 sm:p-3 border bg-white ${status ? getStatusColor(status) : 'border-stone-300'}`}>
-      <p className="text-[9px] sm:text-[10px] uppercase tracking-wide text-stone-500 mb-1">{label}</p>
-      <p className="text-lg sm:text-xl md:text-2xl font-bold text-stone-900" style={{ fontFamily: 'Georgia, Times, serif' }}>{value}</p>
-      {subtext && <p className="text-[9px] sm:text-[10px] text-stone-500">{subtext}</p>}
+    <div className={`text-center p-3 border bg-white ${status ? getStatusColor(status) : 'border-stone-300'}`}>
+      <p className="text-[10px] uppercase tracking-wide text-stone-500 mb-1">{label}</p>
+      <p className="text-xl md:text-2xl font-bold text-stone-900" style={{ fontFamily: 'Georgia, Times, serif' }}>{value}</p>
+      {subtext && <p className="text-[10px] text-stone-500">{subtext}</p>}
       {trend !== undefined && (
-        <p className={`text-[10px] sm:text-xs font-medium ${trend >= 0 ? 'text-green-700' : 'text-red-600'}`}>
+        <p className={`text-xs font-medium ${trend >= 0 ? 'text-green-700' : 'text-red-600'}`}>
           {trend >= 0 ? '▲' : '▼'} {Math.abs(trend)}%
         </p>
       )}
@@ -550,12 +405,24 @@ export default function App() {
   );
 
   const PullQuote = ({ quote, attribution }) => (
-    <div className="border-l-4 border-stone-800 pl-3 sm:pl-4 py-2 my-4 bg-stone-50">
-      <p className="font-serif text-sm sm:text-base md:text-lg italic text-stone-800" style={{ fontFamily: 'Georgia, Times, serif' }}>
+    <div className="border-l-4 border-stone-800 pl-4 py-2 my-4 bg-stone-50">
+      <p className="font-serif text-base md:text-lg italic text-stone-800" style={{ fontFamily: 'Georgia, Times, serif' }}>
         "{quote}"
       </p>
-      {attribution && <p className="text-[10px] sm:text-xs text-stone-500 mt-1">— {attribution}</p>}
+      {attribution && <p className="text-xs text-stone-500 mt-1">— {attribution}</p>}
     </div>
+  );
+
+  const Article = ({ headline, byline, children }) => (
+    <article className="mb-6">
+      <h3 className="font-serif text-xl font-bold text-stone-900 leading-tight mb-1" style={{ fontFamily: 'Georgia, Times, serif' }}>
+        {headline}
+      </h3>
+      {byline && <p className="text-[10px] text-stone-500 uppercase tracking-wide mb-2">{byline}</p>}
+      <div className="text-sm text-stone-700 leading-relaxed" style={{ fontFamily: 'Georgia, Times, serif' }}>
+        {children}
+      </div>
+    </article>
   );
 
   const AlertBox = ({ type, title, children }) => {
@@ -584,164 +451,150 @@ export default function App() {
   return (
     <div className="bg-stone-100 min-h-screen">
       <div className="max-w-5xl mx-auto bg-white shadow-lg">
-        <div className="p-3 sm:p-4 md:p-6">
+        <div className="p-4 md:p-6">
 
           <Masthead />
 
-          {/* Enhanced Month Progress Badge */}
-          <MonthProgressBadge />
-
           {/* ============================================================ */}
-          {/* ABOVE THE FOLD */}
+          {/* ABOVE THE FOLD - Lead Story + Key Metrics */}
           {/* ============================================================ */}
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 mb-6 sm:mb-8">
-            {/* Lead Story */}
-            <div className="lg:col-span-8">
-              <article className="mb-4 sm:mb-6">
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-stone-900 leading-tight mb-2" style={{ fontFamily: 'Georgia, Times, serif' }}>
-                  Titan Group Posts Exceptional January as EBITDA Swings Positive
-                </h3>
-                <p className="text-[10px] text-stone-500 uppercase tracking-wide mb-3">Analysis by Benefique Fractional CFO Services</p>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
+            <div className="md:col-span-8">
+              <Article
+                headline="Titan Posts Exceptional January Margins as Services Surges"
+                byline="Benefique Virtual CFO Analysis"
+              >
+                <p className="first-letter:text-4xl md:first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:leading-none">
+                  <Dateline location={CONFIG.location} /> The Titan Group enters the final week of January
+                  with {formatCurrency(cashData.current)} in combined cash and {cashData.daysOnHand} days of runway,
+                  marking a {cashData.changePct}% increase from month-end December. The business is demonstrating
+                  strong operational execution with consolidated EBITDA margin at {consolidated.ebitdaPct}%.
+                </p>
 
-                <div className="text-sm text-stone-700 leading-relaxed space-y-3" style={{ fontFamily: 'Georgia, Times, serif' }}>
-                  <p className="first-letter:text-4xl sm:first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:leading-none">
-                    <Dateline location={CONFIG.location} /> The Titan Group enters the final week of January 2026 with
-                    a dramatic turnaround in profitability. Combined cash stands at {formatCurrency(consolidated.cash)} with
-                    {' '}{summaryMetrics.cashRunway} days of runway, while EBITDA has swung from negative ${formatNumber(Math.abs(consolidated.ebitdaPrior))} in
-                    December to positive {formatCurrency(consolidated.ebitda)} this month—a {formatCurrency(consolidated.ebitda - consolidated.ebitdaPrior)} improvement.
-                  </p>
+                <p className="mt-3">
+                  At {monthProgress}% through the month, consolidated revenue stands at {formatCurrency(consolidated.revenue)} with
+                  a projected full-month total of {formatCurrency(consolidated.revenueProjected)}. The standout story is the
+                  dramatic margin improvement — EBITDA has swung from negative {formatCurrency(Math.abs(consolidated.ebitdaPrior))} in
+                  December to positive {formatCurrency(consolidated.ebitda)} this month.
+                </p>
 
-                  <p>
-                    At {monthProgress}% through January, consolidated revenue of {formatCurrency(consolidated.revenue)} is tracking
-                    toward a projected {formatCurrency(consolidated.revenueProjected)} full month. Gross margin has expanded
-                    from {consolidated.grossMarginPriorPct}% to {consolidated.grossMarginPct}%, and EBITDA margin improved
-                    from {consolidated.ebitdaPriorPct}% to {consolidated.ebitdaPct}%.
-                  </p>
+                <PullQuote
+                  quote="Services is carrying the month with 69% gross margins and 43% EBITDA. Distribution's 35% revenue decline needs verification — likely timing rather than trend."
+                  attribution="CFO Analysis"
+                />
 
-                  <PullQuote
-                    quote={`The two entities operate as an integrated business model. ${intercompany.direction} ${formatCurrency(intercompany.netPosition)}—this is a settlement timing issue, not a structural concern.`}
-                    attribution="Intercompany Analysis"
-                  />
+                <p>
+                  Year-over-year, January 2026 revenue is flat versus January 2025 ({formatCurrency(ytdComparison.current.revenue)} vs {formatCurrency(ytdComparison.prior.revenue)}),
+                  but profitability has transformed: EBITDA improved from negative {formatCurrency(Math.abs(ytdComparison.prior.ebitda))} to
+                  positive {formatCurrency(ytdComparison.current.ebitda)} — a {formatCurrency(ytdComparison.current.ebitda - ytdComparison.prior.ebitda)} swing.
+                </p>
+              </Article>
 
-                  <p>
-                    Services is having an exceptional month with {entityData[1].grossMarginPct}% gross margin and
-                    {' '}{entityData[1].ebitdaPct}% EBITDA margin. However, {entityData[1].pctOfServicesAP || 95}% of its AP is owed to
-                    Distribution, meaning the apparent "AP {'>'} Cash" concern nets out at the consolidated level. Distribution
-                    continues as the steady profit engine with DSCR of {entityData[0].dscr.toFixed(2)}x.
-                  </p>
-                </div>
-              </article>
-
-              {/* Weekly Cash Flow Trend Chart */}
+              {/* Cash Trend Chart */}
               <div className="border border-stone-300 p-3 mt-4">
-                <h4 className="font-serif font-bold text-sm mb-1">Weekly Cash Position Trend</h4>
-                <p className="text-[10px] text-stone-500 mb-2">12-week view from weekly balance sheets — essential for spotting cash flow patterns</p>
-                <ResponsiveContainer width="100%" height={160}>
-                  <LineChart data={weeklyCashTrend}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
-                    <XAxis dataKey="week" tick={{ fontSize: 8 }} interval={1} angle={-45} textAnchor="end" height={50} />
+                <h4 className="font-serif font-bold text-sm mb-2">5-Week Cash Trend (Combined)</h4>
+                <ResponsiveContainer width="100%" height={120}>
+                  <AreaChart data={cashData.trend}>
+                    <defs>
+                      <linearGradient id="cashGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#166534" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#166534" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <XAxis dataKey="week" tick={{ fontSize: 9 }} />
                     <YAxis tick={{ fontSize: 9 }} tickFormatter={v => `$${(v/1000).toFixed(0)}K`} />
                     <Tooltip formatter={(v) => formatCurrency(v)} />
-                    <Line type="monotone" dataKey="cash" stroke="#166534" strokeWidth={3} name="Combined Cash" dot={{ r: 3, fill: '#166534' }} />
-                    <Line type="monotone" dataKey="distribution" stroke="#1e3a5f" strokeWidth={2} strokeDasharray="5 5" name="Distribution" dot={{ r: 2 }} />
-                    <Line type="monotone" dataKey="services" stroke="#0891b2" strokeWidth={2} strokeDasharray="5 5" name="Services" dot={{ r: 2 }} />
-                  </LineChart>
+                    <Area type="monotone" dataKey="cash" stroke="#166534" fill="url(#cashGradient)" strokeWidth={2} />
+                  </AreaChart>
                 </ResponsiveContainer>
-                <div className="flex flex-wrap justify-center gap-4 mt-2 text-[9px]">
-                  <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#166534]"></span> Combined</span>
-                  <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#1e3a5f] border-dashed"></span> Distribution</span>
-                  <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#0891b2] border-dashed"></span> Services</span>
-                </div>
-                <MetricExplainer title="Why Weekly Cash Matters">
-                  Cash is the lifeblood of your business. Weekly tracking catches problems before they become crises.
-                  Look for patterns: Is cash building? Declining? Volatile? Seasonal dips are normal—unexpected drops need investigation.
-                </MetricExplainer>
+                <p className="text-[10px] text-stone-500 mt-1">
+                  Cash up {formatCurrency(cashData.change)} (+{cashData.changePct}%) since Dec 27
+                </p>
               </div>
 
-              {/* Revenue Comparison Chart */}
+              {/* 6-Month Revenue Trend */}
               <div className="border border-stone-300 p-3 mt-4">
-                <h4 className="font-serif font-bold text-sm mb-2">6-Month Revenue Trend by Entity</h4>
+                <h4 className="font-serif font-bold text-sm mb-2">6-Month Revenue by Entity</h4>
                 <ResponsiveContainer width="100%" height={140}>
                   <BarChart data={revenueTrend}>
-                    <XAxis dataKey="label" tick={{ fontSize: 9 }} />
+                    <XAxis dataKey="month" tick={{ fontSize: 9 }} />
                     <YAxis tick={{ fontSize: 9 }} tickFormatter={v => `$${(v/1000).toFixed(0)}K`} />
                     <Tooltip formatter={(v) => formatCurrency(v)} />
                     <Bar dataKey="distribution" stackId="a" fill="#1e3a5f" name="Distribution" />
                     <Bar dataKey="services" stackId="a" fill="#166534" name="Services" />
                   </BarChart>
                 </ResponsiveContainer>
-                <div className="flex justify-center gap-4 mt-2 text-[9px]">
-                  <span className="flex items-center gap-1"><span className="w-3 h-3 bg-[#1e3a5f]"></span> Distribution</span>
-                  <span className="flex items-center gap-1"><span className="w-3 h-3 bg-[#166534]"></span> Services</span>
-                </div>
                 <p className="text-[10px] text-stone-500 mt-1">*January projected based on {monthProgress}% month complete</p>
               </div>
             </div>
 
-            {/* Sidebar - Key Metrics with Educational Context */}
-            <div className="lg:col-span-4 lg:border-l lg:border-stone-300 lg:pl-6">
+            {/* Sidebar - Key Metrics */}
+            <div className="md:col-span-4 md:border-l md:border-stone-300 md:pl-6">
               <div className="bg-stone-800 text-white px-3 py-2 mb-4">
-                <h3 className="font-serif font-bold text-sm uppercase tracking-wide">Key Health Indicators</h3>
-                <p className="text-[9px] text-stone-300 mt-1">The vital signs of your business</p>
+                <h3 className="font-serif font-bold text-sm uppercase tracking-wide">By The Numbers</h3>
               </div>
 
-              <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 sm:gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-1 gap-3">
                 <StatBox
                   label="Overall Status"
-                  value={`${getStatusEmoji(summaryMetrics.overallStatus)} ${summaryMetrics.overallStatus}`}
+                  value={getStatusEmoji(summaryMetrics.overallStatus) + ' ' + summaryMetrics.overallStatus}
                   subtext={summaryMetrics.statusReason}
                 />
-                <div>
-                  <StatBox
-                    label="Cash Runway"
-                    value={`${summaryMetrics.cashRunway} days`}
-                    status={summaryMetrics.cashRunway >= 45 ? 'GREEN' : summaryMetrics.cashRunway >= 30 ? 'YELLOW' : 'RED'}
-                  />
-                  <p className="text-[9px] text-stone-500 mt-1 px-1">How long you can operate if revenue stopped. Target: 45+ days.</p>
-                </div>
-                <div>
-                  <StatBox
-                    label="TTM DSCR"
-                    value={`${consolidated.ttmDscr.toFixed(2)}x`}
-                    subtext="Trailing 12-Month Coverage"
-                    status={consolidated.ttmDscr >= 1.25 ? 'GREEN' : consolidated.ttmDscr >= 1.0 ? 'YELLOW' : 'RED'}
-                  />
-                  <p className="text-[9px] text-stone-500 mt-1 px-1">TTM operating cash ÷ TTM debt payments. Banks want 1.25x+.</p>
-                </div>
-                <div>
-                  <StatBox
-                    label="TTM Net Income"
-                    value={formatCurrency(summaryMetrics.ttmNetIncome)}
-                    subtext={`${consolidated.ttmNetMarginPct}% margin`}
-                  />
-                  <p className="text-[9px] text-stone-500 mt-1 px-1">Trailing 12 months profit. Smooths out monthly volatility.</p>
+                <StatBox
+                  label="Cash Runway"
+                  value={`${summaryMetrics.cashRunway} days`}
+                  status={summaryMetrics.cashRunway >= 45 ? 'GREEN' : summaryMetrics.cashRunway >= 30 ? 'YELLOW' : 'RED'}
+                />
+                <StatBox
+                  label="TTM DSCR"
+                  value={`${consolidated.dscr.toFixed(2)}x`}
+                  subtext="Debt Service Coverage"
+                  status={consolidated.dscr >= 1.25 ? 'GREEN' : consolidated.dscr >= 1.0 ? 'YELLOW' : 'RED'}
+                />
+                <StatBox
+                  label="TTM Net Income"
+                  value={formatCurrency(summaryMetrics.ttmNetIncome)}
+                  subtext="Trailing 12 Months"
+                />
+              </div>
+
+              {/* Cash Conversion Cycle */}
+              <div className="mt-4 p-3 bg-stone-50 border border-stone-200">
+                <h4 className="font-serif font-bold text-xs mb-2">Cash Conversion Cycle</h4>
+                <div className="text-[11px] space-y-1">
+                  <div className="flex justify-between">
+                    <span>DSO (Days Sales Outstanding)</span>
+                    <span className="font-medium">{consolidated.dso} days</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>DIO (Days Inventory Outstanding)</span>
+                    <span className="font-medium">{consolidated.dio} days</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>DPO (Days Payables Outstanding)</span>
+                    <span className="font-medium">({consolidated.dpo}) days</span>
+                  </div>
+                  <div className="flex justify-between border-t border-stone-300 pt-1 mt-1">
+                    <span className="font-bold">CCC Total</span>
+                    <span className="font-bold">{consolidated.ccc} days</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Cash Conversion Cycle with Explanation */}
-              <div className="mt-4 p-3 border border-stone-300 bg-blue-50">
-                <p className="text-[10px] uppercase font-bold text-blue-900 mb-1">Cash Conversion Cycle</p>
-                <p className="text-[9px] text-blue-700 mb-2 italic">How many days your cash is tied up in operations</p>
-                <div className="text-[11px] text-blue-800 space-y-1">
-                  <div className="flex justify-between">
-                    <span>DSO (Collect from customers)</span>
-                    <span className="font-medium">+{consolidated.dso} days</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>DIO (Inventory sitting)</span>
-                    <span className="font-medium">+{consolidated.dio} days</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>DPO (Pay suppliers)</span>
-                    <span className="font-medium">-{consolidated.dpo} days</span>
-                  </div>
-                  <div className="border-t border-blue-300 pt-1 mt-1 flex justify-between font-bold">
-                    <span>CCC Total</span>
-                    <span className={consolidated.ccc < 0 ? 'text-green-700' : consolidated.ccc > 60 ? 'text-red-600' : ''}>{consolidated.ccc} days</span>
-                  </div>
-                </div>
-                <p className="text-[9px] text-blue-600 mt-2">Lower is better. Negative means suppliers finance your growth!</p>
+              {/* Rule of 40 Box */}
+              <div className="mt-4">
+                <AlertBox type={summaryMetrics.ruleOf40TTM >= 40 ? 'success' : summaryMetrics.ruleOf40TTM >= 25 ? 'warning' : 'danger'} title="Rule of 40 (TTM)">
+                  <p>Score: <strong>{summaryMetrics.ruleOf40TTM}</strong> (Growth% + EBITDA%)</p>
+                  <p className="text-[10px] mt-1">
+                    TTM EBITDA Margin: {consolidated.ttmEbitdaPct}% + Est. Growth: ~9%
+                  </p>
+                  <p className="text-[10px] mt-1">
+                    {summaryMetrics.ruleOf40TTM >= 40 ? 'Healthy balance of growth and profit' :
+                     summaryMetrics.ruleOf40TTM >= 25 ? 'Acceptable - monitor trajectory' :
+                     'Below target - focus on growth or margins'}
+                  </p>
+                </AlertBox>
               </div>
             </div>
           </div>
@@ -749,607 +602,405 @@ export default function App() {
           <div className="border-t-2 border-stone-800 mb-6"></div>
 
           {/* ============================================================ */}
-          {/* SEASONAL COMPARISON */}
+          {/* SECTION: SEASONAL COMPARISON */}
           {/* ============================================================ */}
 
-          <SectionHeader title="Seasonal Comparison" subtitle="How does this month compare to the same period last year?" />
+          <SectionHeader title="Seasonal Comparison" subtitle="January 2026 vs January 2025 — Same Period Analysis" />
 
-          <MetricExplainer title="Why Seasonal Context Matters">
-            Many businesses have natural rhythms—holiday rushes, summer slowdowns, end-of-quarter spikes.
-            Comparing to the same month last year (and adjacent months) reveals whether current performance
-            reflects seasonal patterns or genuine operational change. If your "season shifted" by a few weeks,
-            looking at the month before and after provides the full picture.
-          </MetricExplainer>
-
-          <div className="overflow-x-auto mb-6">
-            <table className="w-full text-[10px] sm:text-[11px] border-collapse min-w-[600px]">
+          <div className="mb-6">
+            <table className="w-full text-[11px] border-collapse">
               <thead>
-                <tr className="border-b-2 border-stone-800 bg-stone-100">
-                  <th className="py-2 px-2 text-left font-serif font-bold">Period</th>
-                  <th className="py-2 px-2 text-right font-serif font-bold">Revenue</th>
-                  <th className="py-2 px-2 text-right font-serif font-bold">Gross Margin</th>
-                  <th className="py-2 px-2 text-right font-serif font-bold">EBITDA Margin</th>
-                  <th className="py-2 px-2 text-right font-serif font-bold">Net Income</th>
-                  <th className="py-2 px-2 text-right font-serif font-bold">Cash</th>
+                <tr className="border-b-2 border-stone-800">
+                  <th className="py-2 text-left font-serif font-bold">Metric</th>
+                  <th className="py-2 text-right font-serif font-bold">Jan 2025</th>
+                  <th className="py-2 text-right font-serif font-bold">Jan 2026</th>
+                  <th className="py-2 text-right font-serif font-bold">YoY Change</th>
                 </tr>
               </thead>
               <tbody>
-                {seasonalComparison.comparisons.map((comp, idx) => (
+                {seasonalComparison.metrics.map((row, idx) => (
                   <tr key={idx} className="border-b border-stone-200">
-                    <td className="py-2 px-2">
-                      <span className="font-medium">{comp.period}</span>
-                      <br /><span className="text-stone-500 text-[9px]">{comp.label}</span>
+                    <td className="py-2 font-medium">{row.metric}</td>
+                    <td className="py-2 text-right text-stone-500">
+                      {row.metric.includes('%') ? `${row.prior}%` : formatCurrency(row.prior)}
                     </td>
-                    <td className="py-2 px-2 text-right">{formatCurrency(comp.revenue)}</td>
-                    <td className="py-2 px-2 text-right">{comp.grossMargin}%</td>
-                    <td className="py-2 px-2 text-right">{comp.ebitdaMargin}%</td>
-                    <td className="py-2 px-2 text-right">{formatCurrency(comp.netIncome)}</td>
-                    <td className="py-2 px-2 text-right">{formatCurrency(comp.cash)}</td>
+                    <td className="py-2 text-right font-medium">
+                      {row.metric.includes('%') ? `${row.current}%` : formatCurrency(row.current)}
+                    </td>
+                    <td className={`py-2 text-right font-medium ${row.change >= 0 ? 'text-green-700' : 'text-red-600'}`}>
+                      {row.change >= 0 ? '+' : ''}{row.change.toFixed(1)}%
+                    </td>
                   </tr>
                 ))}
-                <tr className="bg-green-50 border-b-2 border-green-300 font-bold">
-                  <td className="py-2 px-2">
-                    <span className="text-green-800">{seasonalComparison.currentPeriod.period}</span>
-                    <br /><span className="text-green-600 text-[9px]">{seasonalComparison.currentPeriod.label}</span>
-                  </td>
-                  <td className="py-2 px-2 text-right text-green-800">{formatCurrency(seasonalComparison.currentPeriod.revenue)}</td>
-                  <td className="py-2 px-2 text-right text-green-800">{seasonalComparison.currentPeriod.grossMargin}%</td>
-                  <td className="py-2 px-2 text-right text-green-800">{seasonalComparison.currentPeriod.ebitdaMargin}%</td>
-                  <td className="py-2 px-2 text-right text-green-800">{formatCurrency(seasonalComparison.currentPeriod.netIncome)}</td>
-                  <td className="py-2 px-2 text-right text-green-800">{formatCurrency(seasonalComparison.currentPeriod.cash)}</td>
-                </tr>
               </tbody>
             </table>
-          </div>
-
-          <div className="bg-stone-50 border border-stone-300 p-3 mb-6">
-            <p className="font-bold text-sm text-stone-800 mb-1">Seasonal Insight</p>
-            <p className="text-[11px] text-stone-700">{seasonalComparison.insight}</p>
-          </div>
-
-          <div className="border-t-2 border-stone-800 mb-6"></div>
-
-          {/* ============================================================ */}
-          {/* CONSOLIDATED VIEW (Big Picture) */}
-          {/* ============================================================ */}
-
-          {CONFIG.isMultiEntity && (
-            <>
-              <SectionHeader title="Consolidated View" subtitle="The Big Picture — All Entities Combined" />
-
-              <MetricExplainer title="Why Start with Consolidated?">
-                The consolidated view shows your business as a single unit—how banks, investors, and the IRS see you.
-                It eliminates intercompany transactions that can distort individual entity numbers. Start here for the
-                overall health check, then drill into entities to find where issues originate.
-              </MetricExplainer>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-                <div className="bg-stone-800 text-white p-3 text-center">
-                  <p className="text-[9px] uppercase tracking-wide opacity-70">Combined Cash</p>
-                  <p className="text-xl sm:text-2xl font-bold">{formatCurrency(consolidated.cash)}</p>
-                  <p className="text-[10px] text-green-400">+{formatCurrency(consolidated.cashChange)} from prior</p>
-                </div>
-                <div className="bg-stone-800 text-white p-3 text-center">
-                  <p className="text-[9px] uppercase tracking-wide opacity-70">Combined Revenue</p>
-                  <p className="text-xl sm:text-2xl font-bold">{formatCurrency(consolidated.revenueProjected)}</p>
-                  <p className="text-[10px] opacity-70">projected full month</p>
-                </div>
-                <div className="bg-stone-800 text-white p-3 text-center">
-                  <p className="text-[9px] uppercase tracking-wide opacity-70">Combined EBITDA</p>
-                  <p className="text-xl sm:text-2xl font-bold">{consolidated.ebitdaPct}%</p>
-                  <p className="text-[10px] text-green-400">vs {consolidated.ebitdaPriorPct}% prior</p>
-                </div>
-                <div className="bg-stone-800 text-white p-3 text-center">
-                  <p className="text-[9px] uppercase tracking-wide opacity-70">TTM DSCR</p>
-                  <p className={`text-xl sm:text-2xl font-bold ${consolidated.ttmDscr >= 1.25 ? 'text-green-400' : consolidated.ttmDscr >= 1.0 ? 'text-amber-400' : 'text-red-400'}`}>
-                    {consolidated.ttmDscr.toFixed(2)}x
-                  </p>
-                  <p className="text-[10px] opacity-70">trailing 12-month coverage</p>
-                </div>
-              </div>
-
-              <div className="border-t-2 border-stone-800 mb-6"></div>
-            </>
-          )}
-
-          {/* ============================================================ */}
-          {/* ENTITY PERFORMANCE */}
-          {/* ============================================================ */}
-
-          <SectionHeader title="Entity Performance" subtitle="Individual Operating Entity Analysis — Identifying Where Issues Originate" />
-
-          <MetricExplainer title="Why Entity-Level Analysis?">
-            Problems often hide in consolidation. A struggling entity can be masked by a profitable one.
-            By examining each entity separately, we pinpoint exactly where to focus attention.
-            Status indicators (GREEN/YELLOW/RED) flag entities needing immediate review.
-          </MetricExplainer>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
-            {entityData.map((entity, idx) => (
-              <div key={entity.name} className={`${idx === 0 ? 'md:border-r md:border-stone-200 md:pr-4 lg:pr-6' : 'md:pl-2'}`}>
-                <div className={`px-3 py-2 mb-4 ${getStatusBg(entity.status)} text-white`}>
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-serif font-bold uppercase tracking-wide">{entity.name}</h3>
-                    <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded">{entity.status}</span>
-                  </div>
-                  <p className="text-[10px] opacity-80">{entity.statusNote}</p>
-                </div>
-
-                {/* Key Metrics Grid */}
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                  <div className="text-center p-2 bg-stone-50 border border-stone-200">
-                    <p className="text-[9px] uppercase text-stone-500">Cash</p>
-                    <p className="font-bold text-lg">{formatCurrency(entity.cash)}</p>
-                    <p className="text-[9px] text-green-600">+{formatCurrency(entity.cashChange)}</p>
-                  </div>
-                  <div className="text-center p-2 bg-stone-50 border border-stone-200">
-                    <p className="text-[9px] uppercase text-stone-500">EBITDA %</p>
-                    <p className="font-bold text-lg">{entity.ebitdaPct}%</p>
-                    <p className="text-[9px] text-stone-500">vs {entity.ebitdaPriorPct}% prior</p>
-                  </div>
-                  <div className="text-center p-2 bg-stone-50 border border-stone-200">
-                    <p className="text-[9px] uppercase text-stone-500">DSCR</p>
-                    <p className={`font-bold text-lg ${entity.dscr >= 1.25 ? 'text-green-700' : entity.dscr >= 1.0 ? 'text-amber-600' : 'text-red-600'}`}>
-                      {entity.dscr.toFixed(2)}x
-                    </p>
-                  </div>
-                  <div className="text-center p-2 bg-stone-50 border border-stone-200">
-                    <p className="text-[9px] uppercase text-stone-500">CCC</p>
-                    <p className={`font-bold text-lg ${entity.ccc < 0 ? 'text-green-700' : entity.ccc > 60 ? 'text-amber-600' : ''}`}>
-                      {entity.ccc} days
-                    </p>
-                  </div>
-                </div>
-
-                {/* Details */}
-                <div className="text-[11px] text-stone-700 space-y-1 mb-4">
-                  <div className="flex justify-between">
-                    <span>Revenue MTD</span>
-                    <span className="font-medium">{formatCurrency(entity.revenue)} <span className="text-stone-400">→ proj. {formatCurrency(entity.revenueProjected)}</span></span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Gross Margin</span>
-                    <span className="font-medium">{entity.grossMarginPct}% <span className="text-stone-400">(vs {entity.grossMarginPriorPct}% prior)</span></span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Break-Even Revenue</span>
-                    <span className="font-medium">{formatCurrency(entity.breakEvenRevenue)}/mo</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>TTM Net Income</span>
-                    <span className="font-medium">{formatCurrency(entity.ttmNetIncome)}</span>
-                  </div>
-                </div>
-
-                {/* Working Capital */}
-                <div className="bg-stone-100 p-2 text-[10px]">
-                  <p className="font-bold text-stone-600 mb-1">Working Capital</p>
-                  <div className="grid grid-cols-3 gap-2 text-center">
-                    <div>
-                      <p className="text-stone-500">DSO</p>
-                      <p className="font-bold">{entity.dso}d</p>
-                    </div>
-                    <div>
-                      <p className="text-stone-500">DIO</p>
-                      <p className="font-bold">{entity.dio}d</p>
-                    </div>
-                    <div>
-                      <p className="text-stone-500">DPO</p>
-                      <p className="font-bold">{entity.dpo}d</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Intercompany Position */}
-          <div className="bg-amber-50 p-4 mb-6 border border-amber-200">
-            <h4 className="font-serif font-bold text-sm mb-2 text-amber-900">Intercompany Position</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-[11px]">
-              <div>
-                <p className="text-amber-700">Distribution AR from Services</p>
-                <p className="font-bold text-lg text-amber-900">{formatCurrency(intercompany.distributionARfromServices)}</p>
-                <p className="text-[9px] text-amber-600">{intercompany.pctOfDistributionAR}% of Distribution's AR</p>
-              </div>
-              <div>
-                <p className="text-amber-700">Services AP to Distribution</p>
-                <p className="font-bold text-lg text-amber-900">{formatCurrency(intercompany.servicesAPtoDistribution)}</p>
-                <p className="text-[9px] text-amber-600">{intercompany.pctOfServicesAP}% of Services' AP</p>
-              </div>
-              <div>
-                <p className="text-amber-700">Net Position</p>
-                <p className="font-bold text-lg text-amber-900">{formatCurrency(intercompany.netPosition)}</p>
-                <p className="text-[9px] text-amber-600">{intercompany.direction}</p>
-              </div>
-            </div>
-            <p className="text-[10px] text-amber-700 mt-3 italic">
-              This intercompany balance eliminates on consolidation. The apparent "AP {'>'} Cash" at Services is primarily owed to Distribution—a timing issue, not external exposure.
+            <p className="text-[10px] text-stone-500 mt-2 italic">
+              Key Insight: Revenue is flat YoY, but gross profit nearly doubled and EBITDA swung from -$24K to +$157K.
+              This reflects improved operational efficiency and better margin management.
             </p>
           </div>
 
           <div className="border-t-2 border-stone-800 mb-6"></div>
 
           {/* ============================================================ */}
-          {/* RECEIVABLES & PAYABLES ANALYSIS */}
+          {/* SECTION: CONSOLIDATED VIEW */}
           {/* ============================================================ */}
 
-          <SectionHeader title="Receivables & Payables Analysis" subtitle="AR/AP Aging and Customer/Vendor Concentration" />
+          <SectionHeader title="Consolidated View" subtitle="Combined Distribution + Services Performance" />
 
-          <MetricExplainer title="Why AR/AP Aging Matters">
-            Aging buckets reveal collection and payment health. AR over 90 days often signals collection problems—
-            customers who won't pay or disputes needing resolution. AP aging shows how you're managing vendor relationships.
-            Customer/vendor concentration identifies dependency risks: if your top customer leaves, how much revenue disappears?
-          </MetricExplainer>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            <StatBox label="Combined Cash" value={formatCurrency(consolidated.cash)} trend={cashData.changePct} />
+            <StatBox label="MTD Revenue" value={formatCurrency(consolidated.revenue)} subtext={`Proj: ${formatCurrency(consolidated.revenueProjected)}`} />
+            <StatBox label="MTD EBITDA" value={formatCurrency(consolidated.ebitda)} subtext={`${consolidated.ebitdaPct}% margin`} />
+            <StatBox label="TTM Revenue" value={formatCurrency(consolidated.ttmRevenue)} />
+          </div>
+
+          <div className="border-t-2 border-stone-800 mb-6"></div>
+
+          {/* ============================================================ */}
+          {/* SECTION: ENTITY BREAKDOWN */}
+          {/* ============================================================ */}
+
+          <SectionHeader title="Entity Performance" subtitle="Distribution | Services — Individual Analysis" />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            {entityData.map((entity, idx) => (
+              <div key={entity.name} className={`${idx === 0 ? 'md:border-r md:border-stone-200 md:pr-6' : 'md:pl-2'}`}>
+                <div className={`px-3 py-2 mb-4 ${entity.status === 'GREEN' ? 'bg-green-900' : entity.status === 'YELLOW' ? 'bg-amber-600' : 'bg-red-700'} text-white`}>
+                  <h3 className="font-serif font-bold uppercase tracking-wide">{entity.name}</h3>
+                  <p className="text-[10px] opacity-80">
+                    {entity.status} | {entity.statusNote}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  <div className="text-center p-2 bg-stone-50 border border-stone-200">
+                    <p className="text-[9px] uppercase text-stone-500">Cash</p>
+                    <p className="font-bold text-lg">{formatCurrency(entity.cash)}</p>
+                  </div>
+                  <div className="text-center p-2 bg-stone-50 border border-stone-200">
+                    <p className="text-[9px] uppercase text-stone-500">Gross Margin</p>
+                    <p className="font-bold text-lg">{entity.grossMarginPct}%</p>
+                  </div>
+                  <div className="text-center p-2 bg-stone-50 border border-stone-200">
+                    <p className="text-[9px] uppercase text-stone-500">EBITDA %</p>
+                    <p className="font-bold text-lg">{entity.ebitdaPct}%</p>
+                  </div>
+                  <div className="text-center p-2 bg-stone-50 border border-stone-200">
+                    <p className="text-[9px] uppercase text-stone-500">TTM DSCR</p>
+                    <p className="font-bold text-lg">{entity.dscr.toFixed(2)}x</p>
+                  </div>
+                </div>
+
+                <div className="text-[11px] text-stone-700 space-y-1">
+                  <p><strong>Revenue MTD:</strong> {formatCurrency(entity.revenue)} → Proj: {formatCurrency(entity.revenueProjected)}</p>
+                  <p><strong>vs Prior Month:</strong> {formatCurrency(entity.revenuePrior)} ({entity.revenue > entity.revenuePrior ? '+' : ''}{Math.round((entity.revenue - entity.revenuePrior) / entity.revenuePrior * 100)}%)</p>
+                  <p><strong>Working Capital:</strong> DSO {entity.dso}d / DIO {entity.dio}d / DPO {entity.dpo}d</p>
+                  <p><strong>CCC:</strong> <span className={entity.ccc < 0 ? 'text-green-700 font-medium' : entity.ccc > 60 ? 'text-amber-600' : ''}>{entity.ccc} days</span></p>
+                  <p><strong>AR:</strong> {formatCurrency(entity.ar)} / <strong>AP:</strong> {formatCurrency(entity.ap)}</p>
+                  {entity.inventory > 100000 && <p><strong>Inventory:</strong> {formatCurrency(entity.inventory)}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Intercompany Position */}
+          <div className="bg-stone-100 p-4 mb-6 border border-stone-300">
+            <h4 className="font-serif font-bold text-sm mb-2">Intercompany Position</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-[11px]">
+              <div>
+                <p className="text-stone-500">Distribution AR from Services</p>
+                <p className="font-bold text-lg">{formatCurrency(intercompany.distributionARfromServices)}</p>
+              </div>
+              <div>
+                <p className="text-stone-500">Services AP to Distribution</p>
+                <p className="font-bold text-lg">{formatCurrency(intercompany.servicesAPtoDistribution)}</p>
+              </div>
+              <div>
+                <p className="text-stone-500">Net Position</p>
+                <p className="font-bold text-lg text-amber-700">{intercompany.direction}: {formatCurrency(intercompany.netPosition)}</p>
+              </div>
+            </div>
+            <p className="text-[10px] text-stone-500 mt-2 italic">
+              Note: 94% of Distribution AR and 98% of Services AP is intercompany. External working capital is healthy.
+            </p>
+          </div>
+
+          <div className="border-t-2 border-stone-800 mb-6"></div>
+
+          {/* ============================================================ */}
+          {/* SECTION: AR/AP ANALYSIS */}
+          {/* ============================================================ */}
+
+          <SectionHeader title="Receivables & Payables Analysis" subtitle="Aging, Concentration, and Collection Status" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             {/* AR Aging */}
-            <div className="border border-stone-300 p-4">
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <h4 className="font-serif font-bold text-sm">Accounts Receivable Aging</h4>
-                  <p className="text-[10px] text-stone-500">Who owes you money and for how long</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-bold text-lg">{formatCurrency(arAging.total)}</p>
-                  <p className="text-[9px] text-stone-500">Total AR</p>
-                </div>
-              </div>
-
-              {/* AR Aging Bars */}
-              <div className="mb-4">
-                <div className="flex h-6 rounded overflow-hidden">
-                  <div className="bg-green-500" style={{ width: `${arAging.pctCurrent}%` }} title="Current"></div>
-                  <div className="bg-yellow-400" style={{ width: `${arAging.pct31to60}%` }} title="31-60 days"></div>
-                  <div className="bg-orange-500" style={{ width: `${arAging.pct61to90}%` }} title="61-90 days"></div>
-                  <div className="bg-red-600" style={{ width: `${arAging.pctOver90}%` }} title="90+ days"></div>
-                </div>
-                <div className="flex justify-between text-[9px] mt-1">
-                  <span className="text-green-700">Current: {arAging.pctCurrent}%</span>
-                  <span className="text-yellow-600">31-60: {arAging.pct31to60}%</span>
-                  <span className="text-orange-600">61-90: {arAging.pct61to90}%</span>
-                  <span className="text-red-600">90+: {arAging.pctOver90}%</span>
-                </div>
-              </div>
-
-              {/* AR Aging Detail */}
-              <div className="grid grid-cols-4 gap-2 text-[10px] mb-4">
-                <div className="text-center p-2 bg-green-50 border border-green-200">
-                  <p className="text-green-700">Current</p>
-                  <p className="font-bold">{formatCurrency(arAging.current)}</p>
-                </div>
-                <div className="text-center p-2 bg-yellow-50 border border-yellow-200">
-                  <p className="text-yellow-700">31-60</p>
-                  <p className="font-bold">{formatCurrency(arAging.days31to60)}</p>
-                </div>
-                <div className="text-center p-2 bg-orange-50 border border-orange-200">
-                  <p className="text-orange-700">61-90</p>
-                  <p className="font-bold">{formatCurrency(arAging.days61to90)}</p>
-                </div>
-                <div className="text-center p-2 bg-red-50 border border-red-200">
-                  <p className="text-red-700">90+</p>
-                  <p className="font-bold">{formatCurrency(arAging.over90)}</p>
-                </div>
-              </div>
-
-              {/* Top 3 Customers */}
-              <div className="bg-stone-50 p-3 border border-stone-200">
-                <div className="flex justify-between items-center mb-2">
-                  <p className="font-bold text-[11px] text-stone-700">Top 3 Customers</p>
-                  <span className={`text-[9px] px-2 py-0.5 rounded ${
-                    arAging.concentrationRisk === 'HIGH' ? 'bg-red-100 text-red-700' :
-                    arAging.concentrationRisk === 'MEDIUM' ? 'bg-amber-100 text-amber-700' :
-                    'bg-green-100 text-green-700'
-                  }`}>
-                    {arAging.topThreePct}% of AR
-                  </span>
-                </div>
-                {arAging.topCustomers.map((customer, idx) => (
-                  <div key={idx} className="flex justify-between items-center text-[10px] py-1 border-b border-stone-200 last:border-0">
-                    <div className="flex-1">
-                      <span className="font-medium">{customer.name}</span>
-                      {customer.name.includes('(IC)') && (
-                        <span className="ml-1 text-[8px] bg-amber-200 text-amber-800 px-1 rounded">INTERCO</span>
-                      )}
+            <div>
+              <h4 className="font-serif font-bold text-sm mb-3">Accounts Receivable Aging</h4>
+              <div className="space-y-3">
+                {['distribution', 'services'].map((key) => {
+                  const data = arAging[key];
+                  const total = data.total;
+                  const currentPct = Math.round((data.current / total) * 100) || 0;
+                  const days30Pct = Math.round((data.days1to30 / total) * 100) || 0;
+                  return (
+                    <div key={key} className="p-2 bg-stone-50 border border-stone-200">
+                      <div className="flex justify-between text-[10px] mb-1">
+                        <span className="font-medium uppercase">{key}</span>
+                        <span>{formatCurrency(total)}</span>
+                      </div>
+                      <div className="h-3 bg-stone-200 rounded flex overflow-hidden text-[8px]">
+                        <div className="bg-green-500 flex items-center justify-center text-white" style={{ width: `${currentPct}%` }}>
+                          {currentPct > 10 && `${currentPct}%`}
+                        </div>
+                        <div className="bg-amber-400 flex items-center justify-center" style={{ width: `${days30Pct}%` }}>
+                          {days30Pct > 10 && `${days30Pct}%`}
+                        </div>
+                      </div>
+                      <div className="flex justify-between text-[9px] text-stone-500 mt-1">
+                        <span>Current: {formatCurrency(data.current)}</span>
+                        <span>1-30d: {formatCurrency(data.days1to30)}</span>
+                        {data.intercompanyPct > 0 && (
+                          <span className="text-blue-600 font-medium">{data.intercompanyPct}% IC</span>
+                        )}
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <span className="font-bold">{formatCurrency(customer.amount)}</span>
-                      <span className="text-stone-400 ml-1">({customer.pct}%)</span>
-                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Top Customers */}
+              <h5 className="font-serif font-bold text-xs mt-4 mb-2">Top 3 Customers</h5>
+              <div className="space-y-1">
+                {topCustomers.map((cust, idx) => (
+                  <div key={idx} className="flex justify-between text-[10px] p-1 bg-stone-50">
+                    <span>
+                      {cust.name}
+                      {cust.isIntercompany && <span className="ml-1 px-1 bg-blue-100 text-blue-700 text-[8px] rounded">INTERCO</span>}
+                    </span>
+                    <span className="font-medium">{formatCurrency(cust.amount)}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* AP Aging */}
-            <div className="border border-stone-300 p-4">
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <h4 className="font-serif font-bold text-sm">Accounts Payable Aging</h4>
-                  <p className="text-[10px] text-stone-500">What you owe vendors and for how long</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-bold text-lg">{formatCurrency(apAging.total)}</p>
-                  <p className="text-[9px] text-stone-500">Total AP</p>
-                </div>
-              </div>
-
-              {/* AP Aging Bars */}
-              <div className="mb-4">
-                <div className="flex h-6 rounded overflow-hidden">
-                  <div className="bg-green-500" style={{ width: `${apAging.pctCurrent}%` }} title="Current"></div>
-                  <div className="bg-yellow-400" style={{ width: `${apAging.pct31to60}%` }} title="31-60 days"></div>
-                  <div className="bg-orange-500" style={{ width: `${apAging.pct61to90}%` }} title="61-90 days"></div>
-                  <div className="bg-red-600" style={{ width: `${apAging.pctOver90}%` }} title="90+ days"></div>
-                </div>
-                <div className="flex justify-between text-[9px] mt-1">
-                  <span className="text-green-700">Current: {apAging.pctCurrent}%</span>
-                  <span className="text-yellow-600">31-60: {apAging.pct31to60}%</span>
-                  <span className="text-orange-600">61-90: {apAging.pct61to90}%</span>
-                  <span className="text-red-600">90+: {apAging.pctOver90}%</span>
-                </div>
-              </div>
-
-              {/* AP Aging Detail */}
-              <div className="grid grid-cols-4 gap-2 text-[10px] mb-4">
-                <div className="text-center p-2 bg-green-50 border border-green-200">
-                  <p className="text-green-700">Current</p>
-                  <p className="font-bold">{formatCurrency(apAging.current)}</p>
-                </div>
-                <div className="text-center p-2 bg-yellow-50 border border-yellow-200">
-                  <p className="text-yellow-700">31-60</p>
-                  <p className="font-bold">{formatCurrency(apAging.days31to60)}</p>
-                </div>
-                <div className="text-center p-2 bg-orange-50 border border-orange-200">
-                  <p className="text-orange-700">61-90</p>
-                  <p className="font-bold">{formatCurrency(apAging.days61to90)}</p>
-                </div>
-                <div className="text-center p-2 bg-red-50 border border-red-200">
-                  <p className="text-red-700">90+</p>
-                  <p className="font-bold">{formatCurrency(apAging.over90)}</p>
-                </div>
-              </div>
-
-              {/* Top 3 Vendors */}
-              <div className="bg-stone-50 p-3 border border-stone-200">
-                <div className="flex justify-between items-center mb-2">
-                  <p className="font-bold text-[11px] text-stone-700">Top 3 Vendors</p>
-                  <span className="text-[9px] px-2 py-0.5 rounded bg-stone-200 text-stone-700">
-                    {apAging.topThreePct}% of AP
-                  </span>
-                </div>
-                {apAging.topVendors.map((vendor, idx) => (
-                  <div key={idx} className="flex justify-between items-center text-[10px] py-1 border-b border-stone-200 last:border-0">
-                    <div className="flex-1">
-                      <span className="font-medium">{vendor.name}</span>
-                      {vendor.name.includes('(IC)') && (
-                        <span className="ml-1 text-[8px] bg-amber-200 text-amber-800 px-1 rounded">INTERCO</span>
-                      )}
+            <div>
+              <h4 className="font-serif font-bold text-sm mb-3">Accounts Payable Aging</h4>
+              <div className="space-y-3">
+                {['distribution', 'services'].map((key) => {
+                  const data = apAging[key];
+                  const total = Math.abs(data.total);
+                  const currentPct = Math.round((Math.abs(data.current) / total) * 100) || 0;
+                  const days30Pct = Math.round((Math.abs(data.days1to30) / total) * 100) || 0;
+                  const days60Pct = Math.round((Math.abs(data.days31to60) / total) * 100) || 0;
+                  return (
+                    <div key={key} className="p-2 bg-stone-50 border border-stone-200">
+                      <div className="flex justify-between text-[10px] mb-1">
+                        <span className="font-medium uppercase">{key}</span>
+                        <span>{formatCurrency(total)}</span>
+                      </div>
+                      <div className="h-3 bg-stone-200 rounded flex overflow-hidden text-[8px]">
+                        <div className="bg-green-500 flex items-center justify-center text-white" style={{ width: `${currentPct}%` }}>
+                          {currentPct > 10 && `${currentPct}%`}
+                        </div>
+                        <div className="bg-amber-400 flex items-center justify-center" style={{ width: `${days30Pct}%` }}>
+                          {days30Pct > 10 && `${days30Pct}%`}
+                        </div>
+                        <div className="bg-orange-500 flex items-center justify-center text-white" style={{ width: `${days60Pct}%` }}>
+                          {days60Pct > 10 && `${days60Pct}%`}
+                        </div>
+                      </div>
+                      <div className="flex justify-between text-[9px] text-stone-500 mt-1">
+                        <span>Current: {formatCurrency(data.current)}</span>
+                        <span>1-30d: {formatCurrency(data.days1to30)}</span>
+                        {data.intercompanyPct > 0 && (
+                          <span className="text-blue-600 font-medium">{data.intercompanyPct}% IC</span>
+                        )}
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <span className="font-bold">{formatCurrency(vendor.amount)}</span>
-                      <span className="text-stone-400 ml-1">({vendor.pct}%)</span>
-                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Top Vendors */}
+              <h5 className="font-serif font-bold text-xs mt-4 mb-2">Top 3 Vendors</h5>
+              <div className="space-y-1">
+                {topVendors.map((vendor, idx) => (
+                  <div key={idx} className="flex justify-between text-[10px] p-1 bg-stone-50">
+                    <span>
+                      {vendor.name}
+                      {vendor.isIntercompany && <span className="ml-1 px-1 bg-blue-100 text-blue-700 text-[8px] rounded">INTERCO</span>}
+                    </span>
+                    <span className="font-medium">{formatCurrency(vendor.amount)}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Concentration Risk Alert */}
-          {arAging.concentrationRisk !== 'LOW' && (
-            <div className={`p-3 mb-6 border ${arAging.concentrationRisk === 'HIGH' ? 'bg-red-50 border-red-300' : 'bg-amber-50 border-amber-300'}`}>
-              <p className={`font-bold text-sm ${arAging.concentrationRisk === 'HIGH' ? 'text-red-800' : 'text-amber-800'}`}>
-                Customer Concentration Note
-              </p>
-              <p className={`text-[11px] ${arAging.concentrationRisk === 'HIGH' ? 'text-red-700' : 'text-amber-700'}`}>
-                Top 3 customers represent {arAging.topThreePct}% of receivables. {arAging.topCustomers[0].pct}% is intercompany (eliminates on consolidation).
-                External concentration is ~{arAging.topThreePct - arAging.topCustomers[0].pct}% in top 2 external customers—{arAging.topThreePct - arAging.topCustomers[0].pct < 30 ? 'healthy diversification.' : 'monitor for dependency risk.'}
-              </p>
-            </div>
-          )}
-
           <div className="border-t-2 border-stone-800 mb-6"></div>
 
           {/* ============================================================ */}
-          {/* YTD VS PRIOR YEAR */}
+          {/* SECTION: YTD VS PRIOR YEAR */}
           {/* ============================================================ */}
 
           <SectionHeader title="YTD vs Prior Year" subtitle="Year-over-Year Performance Comparison" />
 
-          <MetricExplainer title="Why Year-over-Year Comparison?">
-            YTD comparisons reveal your trajectory. Are you ahead of last year's pace? Behind?
-            This comparison normalizes for seasonality by comparing the same period each year.
-            The "2026 Projection" extrapolates current performance to show where you're headed if trends continue.
-          </MetricExplainer>
-
-          <div className="overflow-x-auto mb-6">
-            <table className="w-full text-[10px] sm:text-[11px] border-collapse min-w-[600px]">
-              <thead>
-                <tr className="border-b-2 border-stone-800 bg-stone-100">
-                  <th className="py-2 px-2 text-left font-serif font-bold">Metric</th>
-                  <th className="py-2 px-2 text-right font-serif font-bold">Jan 2025 (Actual)</th>
-                  <th className="py-2 px-2 text-right font-serif font-bold">Jan 2026 (MTD)</th>
-                  <th className="py-2 px-2 text-right font-serif font-bold">YoY Change</th>
-                  <th className="py-2 px-2 text-right font-serif font-bold">Full Year 2025</th>
-                  <th className="py-2 px-2 text-right font-serif font-bold">2026 Projection</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ytdComparison.metrics.map((row, idx) => (
-                  <tr key={idx} className="border-b border-stone-200">
-                    <td className="py-2 px-2 font-medium">{row.metric}</td>
-                    <td className="py-2 px-2 text-right text-stone-600">{formatCurrency(row.ytd2025)}</td>
-                    <td className="py-2 px-2 text-right font-bold">{formatCurrency(row.ytd2026)}</td>
-                    <td className={`py-2 px-2 text-right font-bold ${row.variance >= 0 ? 'text-green-700' : 'text-red-600'}`}>
-                      {row.variance >= 0 ? '+' : ''}{row.variance}%
-                    </td>
-                    <td className="py-2 px-2 text-right text-stone-500">{formatCurrency(row.fullYear2025)}</td>
-                    <td className="py-2 px-2 text-right text-blue-700 font-medium">
-                      {row.projected2026 ? formatCurrency(row.projected2026) : '—'}
-                    </td>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <h4 className="font-serif font-bold text-sm mb-3">January Comparison</h4>
+              <table className="w-full text-[11px] border-collapse">
+                <thead>
+                  <tr className="border-b border-stone-300">
+                    <th className="py-1 text-left">Metric</th>
+                    <th className="py-1 text-right">Jan 2025</th>
+                    <th className="py-1 text-right">Jan 2026</th>
+                    <th className="py-1 text-right">Change</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-stone-200">
+                    <td className="py-1">Revenue</td>
+                    <td className="py-1 text-right text-stone-500">{formatCurrency(ytdComparison.prior.revenue)}</td>
+                    <td className="py-1 text-right">{formatCurrency(ytdComparison.current.revenue)}</td>
+                    <td className="py-1 text-right text-green-700">+0.3%</td>
+                  </tr>
+                  <tr className="border-b border-stone-200">
+                    <td className="py-1">Gross Profit</td>
+                    <td className="py-1 text-right text-stone-500">{formatCurrency(ytdComparison.prior.grossProfit)}</td>
+                    <td className="py-1 text-right">{formatCurrency(ytdComparison.current.grossProfit)}</td>
+                    <td className="py-1 text-right text-green-700">+81.6%</td>
+                  </tr>
+                  <tr className="border-b border-stone-200">
+                    <td className="py-1">EBITDA</td>
+                    <td className="py-1 text-right text-red-600">{formatCurrency(ytdComparison.prior.ebitda)}</td>
+                    <td className="py-1 text-right">{formatCurrency(ytdComparison.current.ebitda)}</td>
+                    <td className="py-1 text-right text-green-700">+$181K</td>
+                  </tr>
+                  <tr>
+                    <td className="py-1">Net Income</td>
+                    <td className="py-1 text-right text-red-600">{formatCurrency(ytdComparison.prior.netIncome)}</td>
+                    <td className="py-1 text-right">{formatCurrency(ytdComparison.current.netIncome)}</td>
+                    <td className="py-1 text-right text-green-700">+$180K</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div className="bg-green-50 border border-green-300 p-3 text-center">
-              <p className="text-[10px] text-green-700 uppercase">Revenue Trajectory</p>
-              <p className="font-bold text-2xl text-green-800">
-                {ytdComparison.metrics[0].variance >= 0 ? '↑' : '↓'} {Math.abs(ytdComparison.metrics[0].variance)}%
+            <div>
+              <h4 className="font-serif font-bold text-sm mb-3">Full Year Trajectory</h4>
+              <table className="w-full text-[11px] border-collapse">
+                <thead>
+                  <tr className="border-b border-stone-300">
+                    <th className="py-1 text-left">Metric</th>
+                    <th className="py-1 text-right">FY 2025</th>
+                    <th className="py-1 text-right">2026 Proj</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-stone-200">
+                    <td className="py-1">Revenue</td>
+                    <td className="py-1 text-right text-stone-500">{formatCurrency(ytdComparison.fullYear.prior.revenue)}</td>
+                    <td className="py-1 text-right">{formatCurrency(ytdComparison.fullYear.projected.revenue)}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-1">Net Income</td>
+                    <td className="py-1 text-right text-stone-500">{formatCurrency(ytdComparison.fullYear.prior.netIncome)}</td>
+                    <td className="py-1 text-right">{formatCurrency(ytdComparison.fullYear.projected.netIncome)}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p className="text-[9px] text-stone-500 mt-2 italic">
+                *2026 projection based on Jan run rate. Actual will vary with seasonality.
               </p>
-              <p className="text-[9px] text-green-600">vs same period last year</p>
-            </div>
-            <div className="bg-green-50 border border-green-300 p-3 text-center">
-              <p className="text-[10px] text-green-700 uppercase">EBITDA Trajectory</p>
-              <p className="font-bold text-2xl text-green-800">
-                {ytdComparison.metrics[2].variance >= 0 ? '↑' : '↓'} {Math.abs(ytdComparison.metrics[2].variance)}%
-              </p>
-              <p className="text-[9px] text-green-600">vs same period last year</p>
-            </div>
-            <div className="bg-blue-50 border border-blue-300 p-3 text-center">
-              <p className="text-[10px] text-blue-700 uppercase">2026 Net Income Projection</p>
-              <p className="font-bold text-2xl text-blue-800">{formatCurrency(ytdComparison.metrics[3].projected2026)}</p>
-              <p className="text-[9px] text-blue-600">if current pace continues</p>
             </div>
           </div>
 
           <div className="border-t-2 border-stone-800 mb-6"></div>
 
           {/* ============================================================ */}
-          {/* PROFITABILITY & RULE OF 40 */}
+          {/* SECTION: PROFITABILITY & RULE OF 40 */}
           {/* ============================================================ */}
 
-          <SectionHeader title="Profitability Analysis" subtitle="Margins, Rule of 40, and 6-Month Trends" />
+          <SectionHeader title="Profitability Analysis" subtitle="Margins, Rule of 40, and Trend Analysis" />
 
-          <MetricExplainer title="Understanding Profitability Metrics">
-            Gross Margin shows what you keep after direct costs (COGS). EBITDA Margin shows operating profit before
-            interest, taxes, depreciation, and amortization—the true operational performance of your business.
-            Watch for margin compression (declining percentages) even when revenue grows.
-          </MetricExplainer>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
-            {/* Margin Trend */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div className="border border-stone-300 p-3">
-              <h4 className="font-serif font-bold text-sm mb-2">Margin Trend (Consolidated)</h4>
-              <ResponsiveContainer width="100%" height={160}>
+              <h4 className="font-serif font-bold text-sm mb-2">6-Month Margin Trend</h4>
+              <ResponsiveContainer width="100%" height={150}>
                 <ComposedChart data={marginTrend}>
                   <XAxis dataKey="month" tick={{ fontSize: 9 }} />
-                  <YAxis tick={{ fontSize: 9 }} tickFormatter={v => `${v}%`} domain={[-40, 70]} />
+                  <YAxis tick={{ fontSize: 9 }} tickFormatter={v => `${v}%`} />
                   <Tooltip formatter={(v) => `${v}%`} />
                   <ReferenceLine y={0} stroke="#9ca3af" strokeDasharray="3 3" />
-                  <Bar dataKey="grossMargin" fill="#166534" name="Gross Margin %" radius={[2, 2, 0, 0]} />
-                  <Line type="monotone" dataKey="ebitdaMargin" stroke="#1e3a5f" strokeWidth={3} name="EBITDA Margin %" dot={{ r: 4, fill: '#1e3a5f' }} />
+                  <Bar dataKey="grossMargin" fill="#166534" name="Gross Margin" />
+                  <Line type="monotone" dataKey="ebitdaMargin" stroke="#1e3a5f" strokeWidth={2} name="EBITDA Margin" dot={{ r: 3 }} />
                 </ComposedChart>
               </ResponsiveContainer>
-              <div className="flex justify-center gap-4 mt-2 text-[9px]">
-                <span className="flex items-center gap-1"><span className="w-3 h-3 bg-[#166534]"></span> Gross Margin</span>
-                <span className="flex items-center gap-1"><span className="w-3 h-3 bg-[#1e3a5f] rounded-full"></span> EBITDA Margin</span>
-              </div>
+              <p className="text-[10px] text-stone-500 mt-1">*January projected based on {monthProgress}% month complete</p>
             </div>
 
-            {/* Enhanced Rule of 40 */}
             <div className="border border-stone-300 p-3">
-              <h4 className="font-serif font-bold text-sm mb-2">Rule of 40 Analysis</h4>
-              <ResponsiveContainer width="100%" height={160}>
-                <BarChart data={ruleOf40Data}>
+              <h4 className="font-serif font-bold text-sm mb-2">Rule of 40 Trend (Monthly)</h4>
+              <ResponsiveContainer width="100%" height={150}>
+                <ComposedChart data={ruleOf40Data}>
                   <XAxis dataKey="month" tick={{ fontSize: 9 }} />
-                  <YAxis tick={{ fontSize: 9 }} domain={[-60, 140]} />
+                  <YAxis tick={{ fontSize: 9 }} domain={[-60, 150]} />
                   <Tooltip />
-                  <ReferenceLine y={40} stroke="#166534" strokeWidth={2} strokeDasharray="5 5" />
+                  <ReferenceLine y={40} stroke="#166534" strokeDasharray="5 5" label={{ value: 'Target: 40', fontSize: 9, fill: '#166534' }} />
                   <ReferenceLine y={0} stroke="#9ca3af" strokeDasharray="3 3" />
-                  <Bar dataKey="score" name="Rule of 40" radius={[2, 2, 0, 0]}>
+                  <Bar dataKey="score" name="Rule of 40 Score">
                     {ruleOf40Data.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.score >= 40 ? '#166534' : entry.score >= 25 ? '#d97706' : '#dc2626'} />
                     ))}
                   </Bar>
-                </BarChart>
+                </ComposedChart>
               </ResponsiveContainer>
-              <p className="text-[10px] text-stone-500 mt-1 text-center">
-                Green dashed line = Target (40)
-              </p>
+              <p className="text-[10px] text-stone-500 mt-1">Rule of 40 = MoM Revenue Growth % + EBITDA Margin %</p>
             </div>
           </div>
 
-          {/* Enhanced Rule of 40 Breakdown - TTM Based */}
-          <div className="bg-gradient-to-r from-stone-50 to-stone-100 border border-stone-300 p-4 mb-6">
-            <div className="flex flex-col md:flex-row md:items-start gap-4">
-              <div className="md:w-1/3">
-                <h4 className="font-serif font-bold text-lg mb-2">Rule of 40 (TTM Basis)</h4>
-                <p className="text-[11px] text-stone-600 leading-relaxed">{ruleOf40Enhanced.explanation}</p>
-                <div className="mt-2 p-2 bg-amber-50 border border-amber-200 text-[9px] text-amber-800">
-                  <strong>Why TTM?</strong> Monthly scores swing wildly (this month: {ruleOf40Enhanced.monthlyScore}). TTM shows the real trend.
-                </div>
+          {/* TTM Rule of 40 Breakdown */}
+          <div className="bg-stone-50 p-4 border border-stone-300 mb-6">
+            <h4 className="font-serif font-bold text-sm mb-3">TTM Rule of 40 Breakdown</h4>
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <p className="text-[10px] text-stone-500 uppercase">TTM Revenue Growth</p>
+                <p className="text-2xl font-bold">~9%</p>
+                <p className="text-[9px] text-stone-500">YoY estimate</p>
               </div>
-              <div className="md:w-2/3">
-                {/* TTM Current vs Prior Comparison */}
-                <div className="grid grid-cols-3 gap-3 mb-3">
-                  <div className="bg-white p-3 border border-stone-200 text-center">
-                    <p className="text-[9px] uppercase text-stone-500 mb-1">TTM Revenue Growth</p>
-                    <p className={`text-2xl font-bold ${ruleOf40Enhanced.ttmRevenueGrowth >= 0 ? 'text-green-700' : 'text-red-600'}`}>
-                      {ruleOf40Enhanced.ttmRevenueGrowth > 0 ? '+' : ''}{ruleOf40Enhanced.ttmRevenueGrowth}%
-                    </p>
-                    <p className="text-[9px] text-stone-400">vs TTM 12 months ago</p>
-                  </div>
-                  <div className="bg-white p-3 border border-stone-200 text-center">
-                    <p className="text-[9px] uppercase text-stone-500 mb-1">TTM EBITDA Margin</p>
-                    <p className={`text-2xl font-bold ${ruleOf40Enhanced.ttmEbitdaPct >= 10 ? 'text-green-700' : ruleOf40Enhanced.ttmEbitdaPct >= 0 ? 'text-amber-600' : 'text-red-600'}`}>
-                      {ruleOf40Enhanced.ttmEbitdaPct}%
-                    </p>
-                    <p className="text-[9px] text-stone-400">trailing 12 months</p>
-                  </div>
-                  <div className="bg-white p-3 border-2 border-stone-400 text-center">
-                    <p className="text-[9px] uppercase text-stone-500 mb-1">TTM Rule of 40</p>
-                    <p className={`text-2xl font-bold ${ruleOf40Enhanced.ttmScore >= 40 ? 'text-green-700' : ruleOf40Enhanced.ttmScore >= 25 ? 'text-amber-600' : 'text-red-600'}`}>
-                      {ruleOf40Enhanced.ttmScore}
-                    </p>
-                    <p className="text-[9px] text-stone-400">Growth% + EBITDA%</p>
-                  </div>
-                </div>
-                {/* Prior Year Comparison */}
-                <div className="bg-stone-100 p-2 rounded text-[10px]">
-                  <p className="font-bold text-stone-600 mb-1">Same TTM Period Last Year</p>
-                  <div className="grid grid-cols-3 gap-2 text-center">
-                    <div>
-                      <p className="text-stone-500">TTM Growth</p>
-                      <p className="font-bold">{ruleOf40Enhanced.ttmRevenueGrowthPrior}%</p>
-                    </div>
-                    <div>
-                      <p className="text-stone-500">TTM EBITDA%</p>
-                      <p className="font-bold">{ruleOf40Enhanced.ttmEbitdaPctPrior}%</p>
-                    </div>
-                    <div>
-                      <p className="text-stone-500">TTM Score</p>
-                      <p className="font-bold">{ruleOf40Enhanced.ttmScorePrior}</p>
-                    </div>
-                  </div>
-                </div>
+              <div className="text-2xl font-bold self-center">+</div>
+              <div>
+                <p className="text-[10px] text-stone-500 uppercase">TTM EBITDA Margin</p>
+                <p className="text-2xl font-bold">{consolidated.ttmEbitdaPct}%</p>
+                <p className="text-[9px] text-stone-500">{formatCurrency(consolidated.ttmEbitda)} / {formatCurrency(consolidated.ttmRevenue)}</p>
               </div>
             </div>
-            <div className="mt-3 p-2 bg-blue-50 border border-blue-200 text-[10px] text-blue-800">
-              <strong>Reading this:</strong> Your TTM Rule of 40 score of {ruleOf40Enhanced.ttmScore} (8% revenue growth + 9% EBITDA margin) {ruleOf40Enhanced.ttmScore >= 40 ? 'exceeds' : 'is below'} the target of 40.
-              Compared to the same TTM period last year ({ruleOf40Enhanced.ttmScorePrior}), the EBITDA margin has improved from {ruleOf40Enhanced.ttmEbitdaPctPrior}% to {ruleOf40Enhanced.ttmEbitdaPct}%, while growth has moderated from {ruleOf40Enhanced.ttmRevenueGrowthPrior}% to {ruleOf40Enhanced.ttmRevenueGrowth}%.
+            <div className="text-center mt-3 pt-3 border-t border-stone-300">
+              <p className="text-[10px] text-stone-500 uppercase">TTM Rule of 40 Score</p>
+              <p className={`text-3xl font-bold ${summaryMetrics.ruleOf40TTM >= 40 ? 'text-green-700' : summaryMetrics.ruleOf40TTM >= 25 ? 'text-amber-600' : 'text-red-600'}`}>
+                {summaryMetrics.ruleOf40TTM}
+              </p>
+              <p className="text-[9px] text-stone-500 mt-1">
+                {summaryMetrics.ruleOf40TTM >= 40 ? 'HEALTHY - Strong balance' :
+                 summaryMetrics.ruleOf40TTM >= 25 ? 'ACCEPTABLE - Room for improvement' :
+                 'BELOW TARGET - Focus needed'}
+              </p>
             </div>
           </div>
 
           <div className="border-t-2 border-stone-800 mb-6"></div>
 
           {/* ============================================================ */}
-          {/* EXPENSE WATCH */}
+          {/* SECTION: EXPENSE WATCH */}
           {/* ============================================================ */}
 
-          <SectionHeader title="Expense Watch" subtitle="Spike Detection vs. 4-Month Trailing Average" />
+          <SectionHeader title="Expense Watch" subtitle="Variance Analysis vs. 4-Month Trailing Average" />
 
-          <MetricExplainer title="How We Detect Expense Anomalies">
-            We compare each expense category to its 4-month trailing average. Spikes over 50% trigger alerts.
-            Not all spikes are bad—growth requires investment. But unexpected spikes deserve investigation.
-            Reversals (negative variances) may indicate refunds or accounting corrections.
-          </MetricExplainer>
-
-          <div className="overflow-x-auto mb-6">
-            <table className="w-full text-[10px] sm:text-[11px] border-collapse min-w-[500px]">
+          <div className="mb-6">
+            <table className="w-full text-[11px] border-collapse">
               <thead>
                 <tr className="border-b-2 border-stone-800">
                   <th className="py-2 text-left font-serif font-bold">Category</th>
@@ -1374,6 +1025,7 @@ export default function App() {
                       <span className={`px-2 py-1 text-[9px] font-bold rounded ${
                         spike.status === 'SPIKE' ? 'bg-red-100 text-red-700' :
                         spike.status === 'REVERSAL' ? 'bg-blue-100 text-blue-700' :
+                        spike.status === 'LOW' ? 'bg-amber-100 text-amber-700' :
                         'bg-stone-100 text-stone-700'
                       }`}>
                         {spike.status}
@@ -1383,93 +1035,66 @@ export default function App() {
                 ))}
               </tbody>
             </table>
+            <p className="text-[10px] text-stone-500 mt-2 italic">
+              Note: Services payroll shows $53K wages vs $15K average — verify if this includes catch-up entries, bonuses, or misclassification.
+              Distribution rent at $1.9K vs $12.5K average needs confirmation.
+            </p>
           </div>
-
-          {expenseSpikes.length > 0 && (
-            <div className="bg-red-50 border border-red-200 p-3 mb-6">
-              <p className="font-serif font-bold text-sm text-red-900 mb-2">Expense Alert Detail</p>
-              {expenseSpikes.filter(s => s.status === 'SPIKE').map((spike, idx) => (
-                <p key={idx} className="text-[11px] text-red-800 mb-1">
-                  <strong>{spike.category}:</strong> {spike.note}
-                </p>
-              ))}
-            </div>
-          )}
 
           <div className="border-t-2 border-stone-800 mb-6"></div>
 
           {/* ============================================================ */}
-          {/* OWNER DISTRIBUTIONS */}
+          {/* SECTION: OWNER DRAWS */}
           {/* ============================================================ */}
 
           <SectionHeader title="Owner Distributions" subtitle="Partner Draws and Equity Movement" />
 
-          <MetricExplainer title="Balancing Owner Compensation with Business Needs">
-            Owner draws reduce working capital and retained earnings. While owners deserve compensation,
-            excessive draws can strain cash flow and limit growth capacity. We track draws as a percentage
-            of net income: under 20% is conservative, 20-50% is moderate, over 50% warrants discussion.
-          </MetricExplainer>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="text-center p-4 bg-stone-50 border border-stone-200">
               <p className="text-[10px] uppercase text-stone-500">MTD Draws</p>
               <p className="font-bold text-2xl">{formatCurrency(ownerDraws.mtdTotal)}</p>
               <p className="text-[10px] text-stone-500">{ownerDraws.mtdPctOfIncome}% of MTD Net Income</p>
-              <p className={`text-[10px] mt-1 font-medium ${ownerDraws.mtdPctOfIncome <= 20 ? 'text-green-600' : ownerDraws.mtdPctOfIncome <= 50 ? 'text-amber-600' : 'text-red-600'}`}>
-                {ownerDraws.mtdPctOfIncome <= 20 ? '✓ Conservative' : ownerDraws.mtdPctOfIncome <= 50 ? '⚠ Moderate' : '⚠ High'}
+              <p className={`text-[9px] mt-1 ${ownerDraws.mtdPctOfIncome < 30 ? 'text-green-600' : ownerDraws.mtdPctOfIncome < 60 ? 'text-amber-600' : 'text-red-600'}`}>
+                {ownerDraws.mtdPctOfIncome < 30 ? 'Conservative' : ownerDraws.mtdPctOfIncome < 60 ? 'Moderate' : 'High'}
               </p>
             </div>
             <div className="text-center p-4 bg-stone-50 border border-stone-200">
               <p className="text-[10px] uppercase text-stone-500">Cumulative Distributions</p>
               <p className="font-bold text-2xl">{formatCurrency(ownerDraws.totalCumulative)}</p>
-              <p className="text-[10px] text-stone-500">All-time partner draws</p>
+              <p className="text-[10px] text-stone-500">TTM Total</p>
             </div>
             <div className="p-4 bg-stone-50 border border-stone-200">
-              <p className="text-[10px] uppercase text-stone-500 mb-2">January by Partner</p>
+              <p className="text-[10px] uppercase text-stone-500 mb-2">By Partner</p>
               {ownerDraws.partners.map((partner) => (
                 <div key={partner.name} className="flex justify-between text-[11px] mb-1">
                   <span>{partner.name}</span>
-                  <span className="font-medium">{formatCurrency(partner.mtd)}</span>
+                  <span className="font-medium">{formatCurrency(partner.mtd)} MTD / {formatCurrency(partner.cumulative)} TTM</span>
                 </div>
               ))}
-              <div className="border-t border-stone-300 mt-2 pt-2 flex justify-between text-[11px] font-bold">
-                <span>Total</span>
-                <span>{formatCurrency(ownerDraws.mtdTotal)}</span>
-              </div>
             </div>
           </div>
 
           <div className="border-t-2 border-stone-800 mb-6"></div>
 
           {/* ============================================================ */}
-          {/* ACTION ITEMS */}
+          {/* SECTION: ACTION ITEMS */}
           {/* ============================================================ */}
 
-          <SectionHeader title="Action Items" subtitle="Items Requiring Attention This Week" />
+          <SectionHeader title="Action Items" subtitle="Items Requiring Attention" />
 
           <div className="mb-6">
             {actionItems.map((item, idx) => (
-              <div key={idx} className={`flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-3 p-3 mb-3 border-l-4 ${
+              <div key={idx} className={`flex items-start gap-3 p-3 mb-2 border-l-4 ${
                 item.urgency === 'HIGH' ? 'border-red-500 bg-red-50' :
                 item.urgency === 'MEDIUM' ? 'border-amber-500 bg-amber-50' :
                 'border-stone-300 bg-stone-50'
               }`}>
-                <span className="font-bold text-stone-400 text-lg">#{item.priority}</span>
+                <span className="font-bold text-stone-400">#{item.priority}</span>
                 <div className="flex-1">
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <p className="font-medium text-sm">{item.item}</p>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                      item.entity === 'Distribution' ? 'bg-blue-900 text-white' :
-                      item.entity === 'Services' ? 'bg-green-800 text-white' :
-                      item.entity === 'Both' ? 'bg-purple-700 text-white' :
-                      'bg-stone-600 text-white'
-                    }`}>
-                      {item.entity === 'Both' ? 'BOTH ENTITIES' : item.entity.toUpperCase()}
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-stone-600 mt-1">{item.detail}</p>
+                  <p className="font-medium text-sm">{item.item}</p>
+                  <p className="text-[10px] text-stone-500">{item.entity}</p>
                 </div>
-                <span className={`self-start text-[9px] font-bold px-2 py-1 rounded ${
+                <span className={`text-[9px] font-bold px-2 py-1 rounded ${
                   item.urgency === 'HIGH' ? 'bg-red-200 text-red-800' :
                   item.urgency === 'MEDIUM' ? 'bg-amber-200 text-amber-800' :
                   'bg-stone-200 text-stone-800'
@@ -1487,9 +1112,9 @@ export default function App() {
           <div className="border-t-2 border-stone-800 mt-8 pt-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-[9px] text-stone-500 gap-4">
               <div>
-                <p className="font-bold text-stone-700">The Benefique Financial Times</p>
-                <p>Published by Benefique Fractional CFO Services</p>
-                <p className="mt-1">© 2026 Benefique Capital LLC. All rights reserved.</p>
+                <p className="font-bold">The Benefique Financial Times</p>
+                <p>Published by Benefique Virtual CFO Services</p>
+                <p className="mt-1">© 2026 Benefique LLC. All rights reserved.</p>
               </div>
               <div className="md:text-right">
                 <p><strong>Data Source:</strong> {CONFIG.dataSource}</p>
@@ -1500,25 +1125,17 @@ export default function App() {
             </div>
 
             {/* Audit Trail */}
-            <div className="mt-4 p-3 bg-stone-50 border border-stone-200 text-[9px]">
-              <p className="font-bold text-stone-600 mb-2">Audit Trail</p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                <div>
-                  <p className="text-stone-400">Consolidated Cash</p>
-                  <p className="font-medium">{formatCurrency(consolidated.cash)}</p>
-                </div>
-                <div>
-                  <p className="text-stone-400">Consolidated Revenue</p>
-                  <p className="font-medium">{formatCurrency(consolidated.revenue)}</p>
-                </div>
-                <div>
-                  <p className="text-stone-400">TTM Net Income</p>
-                  <p className="font-medium">{formatCurrency(consolidated.ttmNetIncome)}</p>
-                </div>
-                <div>
-                  <p className="text-stone-400">Month Progress</p>
-                  <p className="font-medium">{monthProgress}% ({CONFIG.currentDay}/{CONFIG.daysInMonth})</p>
-                </div>
+            <div className="mt-4 p-2 bg-stone-50 border border-stone-200 text-[8px] text-stone-400">
+              <p className="font-bold mb-1">Audit Trail - Key Figures</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <span>Cash: {formatCurrency(consolidated.cash)}</span>
+                <span>AR: {formatCurrency(consolidated.ar)}</span>
+                <span>AP: {formatCurrency(consolidated.ap)}</span>
+                <span>Inventory: {formatCurrency(consolidated.inventory)}</span>
+                <span>MTD Revenue: {formatCurrency(consolidated.revenue)}</span>
+                <span>MTD EBITDA: {formatCurrency(consolidated.ebitda)}</span>
+                <span>TTM Revenue: {formatCurrency(consolidated.ttmRevenue)}</span>
+                <span>TTM DSCR: {consolidated.dscr.toFixed(2)}x</span>
               </div>
             </div>
 
