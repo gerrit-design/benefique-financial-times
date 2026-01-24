@@ -18,7 +18,7 @@ export default function App() {
     industry: 'Marine & Industrial Services',
     location: 'Hollywood, Florida',
     reportDate: 'January 24, 2026',
-    editionNumber: 2,
+    editionNumber: 1,
     periodStart: 'February 2025',
     periodEnd: 'January 2026',
     currentDay: 24,
