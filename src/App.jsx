@@ -277,18 +277,18 @@ export default function App() {
   };
 
   const expenseSpikes = [
-    { category: 'Payroll (Wages)', entity: 'Services', current: 53116, average: 15048, variance: 253, status: 'SPIKE' },
-    { category: 'Advertising', entity: 'Services', current: -1709, average: 6426, variance: -127, status: 'REVERSAL' },
+    { category: 'Payroll (Wages)', entity: 'Services', current: 53116, average: 18888, variance: 181, status: 'SPIKE' },
+    { category: 'Advertising', entity: 'Services', current: -1709, average: 9065, variance: -119, status: 'REVERSAL' },
     { category: 'Rent & Lease', entity: 'Distribution', current: 1931, average: 12539, variance: -85, status: 'LOW' },
   ];
 
   const ownerDraws = {
-    totalCumulative: 618149,
+    ttmTotal: 242885,
     mtdTotal: 11233,
     mtdPctOfIncome: 7.3,
     partners: [
-      { name: 'Francisco', cumulative: 251569, mtd: 1000 },
-      { name: 'Ronel', cumulative: 366580, mtd: 10233 },
+      { name: 'Francisco', ttm: 99043, mtd: 1000 },
+      { name: 'Ronel', ttm: 143842, mtd: 10233 },
     ],
   };
 
@@ -300,7 +300,7 @@ export default function App() {
   };
 
   const actionItems = [
-    { priority: 1, item: 'Investigate Services payroll spike (+253% vs avg) - verify if this includes catch-up or bonus', entity: 'Services', urgency: 'HIGH' },
+    { priority: 1, item: 'Investigate Services payroll spike (+181% vs avg) - verify if this includes catch-up or bonus', entity: 'Services', urgency: 'HIGH' },
     { priority: 2, item: 'Distribution revenue down 35% MoM - verify if timing issue or trend', entity: 'Distribution', urgency: 'MEDIUM' },
     { priority: 3, item: 'Review Distribution rent ($1.9K vs $12.5K avg) - confirm if partial month or accrual issue', entity: 'Distribution', urgency: 'MEDIUM' },
     { priority: 4, item: 'Services AP aging: $62K in 31-60 days (intercompany) - schedule settlement', entity: 'Both', urgency: 'LOW' },
@@ -1059,16 +1059,16 @@ export default function App() {
               </p>
             </div>
             <div className="text-center p-4 bg-stone-50 border border-stone-200">
-              <p className="text-[10px] uppercase text-stone-500">Cumulative Distributions</p>
-              <p className="font-bold text-2xl">{formatCurrency(ownerDraws.totalCumulative)}</p>
-              <p className="text-[10px] text-stone-500">TTM Total</p>
+              <p className="text-[10px] uppercase text-stone-500">TTM Distributions</p>
+              <p className="font-bold text-2xl">{formatCurrency(ownerDraws.ttmTotal)}</p>
+              <p className="text-[10px] text-stone-500">Trailing 12 Months</p>
             </div>
             <div className="p-4 bg-stone-50 border border-stone-200">
               <p className="text-[10px] uppercase text-stone-500 mb-2">By Partner</p>
               {ownerDraws.partners.map((partner) => (
                 <div key={partner.name} className="flex justify-between text-[11px] mb-1">
                   <span>{partner.name}</span>
-                  <span className="font-medium">{formatCurrency(partner.mtd)} MTD / {formatCurrency(partner.cumulative)} TTM</span>
+                  <span className="font-medium">{formatCurrency(partner.mtd)} MTD / {formatCurrency(partner.ttm)} TTM</span>
                 </div>
               ))}
             </div>
