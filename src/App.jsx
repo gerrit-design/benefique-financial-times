@@ -369,12 +369,12 @@ export default function App() {
         </div>
         {/* Month Progress Bar */}
         <div className="mt-3 max-w-md mx-auto">
-          <div className="flex justify-between text-[9px] text-stone-500 mb-1">
+          <div className="flex justify-between text-[10px] text-stone-600 font-medium mb-1">
             <span>Month Progress</span>
             <span>{monthProgress}% ({CONFIG.currentDay}/{CONFIG.daysInMonth} days)</span>
           </div>
-          <div className="h-2 bg-stone-200 rounded-full overflow-hidden">
-            <div className="h-full bg-stone-700 rounded-full" style={{ width: `${monthProgress}%` }}></div>
+          <div className="h-4 bg-stone-200 rounded-full overflow-hidden border border-stone-300">
+            <div className="h-full bg-amber-600 rounded-full transition-all" style={{ width: `${monthProgress}%` }}></div>
           </div>
         </div>
       </div>
