@@ -943,7 +943,7 @@ export default function App() {
             </div>
 
             <div className="border border-stone-300 p-3">
-              <h4 className="font-serif font-bold text-sm mb-2">Rule of 40 Trend (Monthly)</h4>
+              <h4 className="font-serif font-bold text-sm mb-2">Rule of 40 Trend (Rolling TTM)</h4>
               <ResponsiveContainer width="100%" height={150}>
                 <ComposedChart data={ruleOf40Data}>
                   <XAxis dataKey="month" tick={{ fontSize: 9 }} />
