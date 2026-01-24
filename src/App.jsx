@@ -3,7 +3,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 // ============================================================
 // THE BENEFIQUE FINANCIAL TIMES - TITAN GROUP
-// Edition: January 24, 2026
+// Edition: January 25, 2026 (Saturday Edition, Vol. I, No. 1)
 // ============================================================
 
 export default function App() {
@@ -17,11 +17,11 @@ export default function App() {
     clientSlug: 'titan',
     industry: 'Marine & Industrial Services',
     location: 'Hollywood, Florida',
-    reportDate: 'January 24, 2026',
+    reportDate: 'January 25, 2026',
     editionNumber: 1,
     periodStart: 'February 2025',
     periodEnd: 'January 2026',
-    currentDay: 24,
+    currentDay: 25,
     daysInMonth: 31,
     isMultiEntity: true,
     entities: ['Distribution', 'Services'],
@@ -363,7 +363,7 @@ export default function App() {
           <span className="hidden md:inline text-stone-400">|</span>
           <span className="font-medium">{CONFIG.reportDate}</span>
           <span className="hidden md:inline text-stone-400">|</span>
-          <span>Friday Edition</span>
+          <span>Saturday Edition</span>
           <span className="hidden md:inline text-stone-400">|</span>
           <span className="italic">{CONFIG.location}</span>
         </div>
