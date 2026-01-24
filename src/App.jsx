@@ -350,7 +350,7 @@ export default function App() {
       <div className="border-t-2 border-stone-800 mb-2"></div>
       <div className="text-center px-4">
         <p className="text-[10px] tracking-[0.3em] text-stone-600 uppercase mb-1">
-          Benefique Virtual CFO | {CONFIG.industry}
+          Benefique Fractional CFO | {CONFIG.industry}
         </p>
         <h1 className="font-serif text-4xl md:text-5xl font-black text-stone-900 tracking-tight" style={{ fontFamily: 'Georgia, Times, serif' }}>
           The Benefique Financial Times
@@ -463,7 +463,7 @@ export default function App() {
             <div className="md:col-span-8">
               <Article
                 headline="Titan Posts Exceptional January Margins as Services Surges"
-                byline="Benefique Virtual CFO Analysis"
+                byline="Benefique Fractional CFO Analysis"
               >
                 <p className="first-letter:text-4xl md:first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:leading-none">
                   <Dateline location={CONFIG.location} /> The Titan Group enters the final week of January
@@ -1113,11 +1113,10 @@ export default function App() {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-[9px] text-stone-500 gap-4">
               <div>
                 <p className="font-bold">The Benefique Financial Times</p>
-                <p>Published by Benefique Virtual CFO Services</p>
-                <p className="mt-1">© 2026 Benefique LLC. All rights reserved.</p>
+                <p>Published by Benefique Fractional CFO Services</p>
+                <p className="mt-1">© 2026 Benefique Capital LLC. All rights reserved.</p>
               </div>
               <div className="md:text-right">
-                <p><strong>Data Source:</strong> {CONFIG.dataSource}</p>
                 <p><strong>Last Sync:</strong> {CONFIG.lastSync}</p>
                 <p><strong>Report Basis:</strong> Accrual</p>
                 <p className="mt-1"><strong>Next Edition:</strong> Saturday, February 1, 2026</p>
