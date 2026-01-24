@@ -3,7 +3,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 // ============================================================
 // THE BENEFIQUE FINANCIAL TIMES - TITAN GROUP
-// Edition: January 25, 2026 (Saturday Edition, Vol. I, No. 1)
+// Edition: January 24, 2026 (Saturday Edition, Vol. I, No. 1)
 // ============================================================
 
 export default function App() {
@@ -17,11 +17,11 @@ export default function App() {
     clientSlug: 'titan',
     industry: 'Marine & Industrial Services',
     location: 'Hollywood, Florida',
-    reportDate: 'January 25, 2026',
+    reportDate: 'January 24, 2026',
     editionNumber: 1,
     periodStart: 'February 2025',
     periodEnd: 'January 2026',
-    currentDay: 25,
+    currentDay: 24,
     daysInMonth: 31,
     isMultiEntity: true,
     entities: ['Distribution', 'Services'],
@@ -50,8 +50,8 @@ export default function App() {
     cashRunway: 50,
     ttmNetIncome: 440520,
     mtdNetIncome: 153069,
-    ruleOf40Score: 17,
-    ruleOf40TTM: 17,
+    ruleOf40Score: -11,
+    ruleOf40TTM: -11,
   };
 
   const cashData = {
@@ -175,15 +175,6 @@ export default function App() {
     { month: 'Nov', grossMargin: 30, ebitdaMargin: -1 },
     { month: 'Dec', grossMargin: 35, ebitdaMargin: -2 },
     { month: 'Jan*', grossMargin: 58, ebitdaMargin: 33 },
-  ];
-
-  const ruleOf40Data = [
-    { month: 'Aug', growth: -19, ebitdaMargin: -4, score: -23 },
-    { month: 'Sep', growth: -27, ebitdaMargin: -25, score: -52 },
-    { month: 'Oct', growth: 128, ebitdaMargin: 14, score: 142 },
-    { month: 'Nov', growth: -25, ebitdaMargin: -1, score: -26 },
-    { month: 'Dec', growth: -11, ebitdaMargin: -2, score: -13 },
-    { month: 'Jan*', growth: 19, ebitdaMargin: 33, score: 52 },
   ];
 
   // AR Aging Data
@@ -587,7 +578,7 @@ export default function App() {
                 <AlertBox type={summaryMetrics.ruleOf40TTM >= 40 ? 'success' : summaryMetrics.ruleOf40TTM >= 25 ? 'warning' : 'danger'} title="Rule of 40 (TTM)">
                   <p>Score: <strong>{summaryMetrics.ruleOf40TTM}</strong> (Growth% + EBITDA%)</p>
                   <p className="text-[10px] mt-1">
-                    TTM EBITDA Margin: {consolidated.ttmEbitdaPct}% + Est. Growth: ~9%
+                    TTM EBITDA Margin: {consolidated.ttmEbitdaPct}% + YoY Growth: -19%
                   </p>
                   <p className="text-[10px] mt-1">
                     {summaryMetrics.ruleOf40TTM >= 40 ? 'Healthy balance of growth and profit' :
@@ -942,24 +933,6 @@ export default function App() {
               <p className="text-[10px] text-stone-500 mt-1">*January projected based on {monthProgress}% month complete</p>
             </div>
 
-            <div className="border border-stone-300 p-3">
-              <h4 className="font-serif font-bold text-sm mb-2">Rule of 40 Trend (Rolling TTM)</h4>
-              <ResponsiveContainer width="100%" height={150}>
-                <ComposedChart data={ruleOf40Data}>
-                  <XAxis dataKey="month" tick={{ fontSize: 9 }} />
-                  <YAxis tick={{ fontSize: 9 }} domain={[-60, 150]} />
-                  <Tooltip />
-                  <ReferenceLine y={40} stroke="#166534" strokeDasharray="5 5" label={{ value: 'Target: 40', fontSize: 9, fill: '#166534' }} />
-                  <ReferenceLine y={0} stroke="#9ca3af" strokeDasharray="3 3" />
-                  <Bar dataKey="score" name="Rule of 40 Score">
-                    {ruleOf40Data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.score >= 40 ? '#166534' : entry.score >= 25 ? '#d97706' : '#dc2626'} />
-                    ))}
-                  </Bar>
-                </ComposedChart>
-              </ResponsiveContainer>
-              <p className="text-[10px] text-stone-500 mt-1">Rule of 40 = MoM Revenue Growth % + EBITDA Margin %</p>
-            </div>
           </div>
 
           {/* TTM Rule of 40 Breakdown */}
@@ -968,8 +941,8 @@ export default function App() {
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-[10px] text-stone-500 uppercase">TTM Revenue Growth</p>
-                <p className="text-2xl font-bold">~9%</p>
-                <p className="text-[9px] text-stone-500">YoY estimate</p>
+                <p className="text-2xl font-bold text-red-600">-19%</p>
+                <p className="text-[9px] text-stone-500">YoY (Distribution -54%, Services +14%)</p>
               </div>
               <div className="text-2xl font-bold self-center">+</div>
               <div>
