@@ -17,12 +17,12 @@ export default function App() {
     clientSlug: 'titan',
     industry: 'Marine & Industrial Services',
     location: 'Hollywood, Florida',
-    reportDate: 'January 24, 2026',
-    editionNumber: 1,
+    reportDate: 'February 21, 2026',
+    editionNumber: 2,
     periodStart: 'February 2025',
     periodEnd: 'January 2026',
-    currentDay: 24,
-    daysInMonth: 31,
+    currentDay: 21,
+    daysInMonth: 28,
     isMultiEntity: true,
     entities: ['Distribution', 'Services'],
     hasConsolidated: true,
@@ -30,7 +30,7 @@ export default function App() {
     secondaryColor: '#166534',
     alertColor: '#dc2626',
     dataSource: 'QuickBooks via g-accon',
-    lastSync: '2026-01-24 06:22:13',
+    lastSync: '2026-02-21 10:10:00',
     spreadsheetIds: {
       distribution: '1RfTsvuqxoFYgk5Jd4JVuyIUlToug9y7bbtsTWheDFew',
       services: '1QEqKj0bS3pD71uH2Z-Ae0cFVLY3rr2HnPKHI9S3yP7E',
@@ -41,7 +41,7 @@ export default function App() {
   const monthProgress = Math.round((CONFIG.currentDay / CONFIG.daysInMonth) * 100);
 
   // ============================================================
-  // DATA - January 24, 2026
+  // DATA - February 21, 2026
   // ============================================================
 
   const summaryMetrics = {
@@ -49,17 +49,17 @@ export default function App() {
     statusReason: 'Strong January Performance',
     cashRunway: 50,
     ttmNetIncome: 440520,
-    mtdNetIncome: 153069,
+    mtdNetIncome: 218648,
     ruleOf40Score: 40,
     ruleOf40TTM: 40,
   };
 
   const cashData = {
-    current: 193031,
-    prior: 139918,
-    change: 53113,
-    changePct: 38,
-    daysOnHand: 50,
+    current: 131281,
+    prior: 141000,
+    change: -9719,
+    changePct: -7,
+    daysOnHand: 45,
     trend: [
       { week: 'Dec 27', cash: 166675 },
       { week: 'Jan 3', cash: 119415 },
@@ -74,12 +74,12 @@ export default function App() {
       name: 'Distribution',
       status: 'YELLOW',
       statusNote: 'Revenue down 35% MoM',
-      cash: 75742,
-      revenue: 168320,
+      cash: 52562,
+      revenue: 275404,
       revenueProjected: 217510,
       revenuePrior: 253638,
-      ebitda: 23273,
-      ebitdaPct: 14,
+      ebitda: 81095,
+      ebitdaPct: 29,
       grossMarginPct: 38,
       dscr: 2.44,
       dso: 17,
@@ -96,8 +96,8 @@ export default function App() {
       name: 'Services',
       status: 'GREEN',
       statusNote: 'Revenue up 16% MoM',
-      cash: 117289,
-      revenue: 311386,
+      cash: 78720,
+      revenue: 319705,
       revenueProjected: 402466,
       revenuePrior: 269217,
       ebitda: 133820,
