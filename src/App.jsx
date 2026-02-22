@@ -44,8 +44,8 @@ export default function App() {
 
   // ============================================================
   // DATA - February 21, 2026
-  // NOTE: AR/AP aging figures are estimated from DSO/DIO/DPO calculations.
-  //       Full aging reports should be pulled from Google Sheets to confirm.
+  // NOTE: Distribution AR and both APs sourced from Google Sheets aging tabs (Feb 21, 2026).
+  //       Services AR could not be retrieved (tab inaccessible) — remains estimated.
   // ============================================================
 
   const summaryMetrics = {
@@ -86,12 +86,12 @@ export default function App() {
       ebitdaPct: 34,
       grossMarginPct: 49,
       dscr: 2.80,                   // estimated TTM-based improvement
-      dso: 20,
+      dso: 39,                      // actual: $379,512 AR / ($275,404 rev / 28 days)
       dio: 80,
-      dpo: 25,
-      ccc: 75,
-      ar: 183000,                   // estimated: revenue * DSO/30
-      ap: 118000,                   // estimated: COGS * DPO/30
+      dpo: 21,                      // actual: $105,552 AP / ($140,901 COGS / 28 days)
+      ccc: 98,                      // 39 + 80 - 21 (elevated by intercompany AR)
+      ar: 379512,                   // actual from Google Sheets AgedReceivablesSummaryByCustomer
+      ap: 105552,                   // actual from Google Sheets AgedPayableSummaryByVendor
       inventory: 530000,            // estimated (Jan was $545K)
       ttmRevenue: 3200000,          // estimated
       ttmNetIncome: 370000,         // estimated
@@ -108,12 +108,12 @@ export default function App() {
       ebitdaPct: 43,
       grossMarginPct: 74,
       dscr: 1.90,                   // estimated TTM-based improvement
-      dso: 13,
+      dso: 13,                      // estimated: $139K AR / ($319,705 rev / 28 days) — AR not confirmed
       dio: 4,
-      dpo: 18,
-      ccc: -1,
-      ar: 139000,                   // estimated: revenue * DSO/30
-      ap: 175000,                   // estimated (mostly intercompany, similar to Jan)
+      dpo: 52,                      // actual: $151,962 AP / ($82,245 COGS / 28 days); high = IC payables
+      ccc: -35,                     // 13 + 4 - 52 (negative = favorable: paid before collected)
+      ar: 139000,                   // estimated — AgedReceivablesSummaryByCustomer tab inaccessible
+      ap: 151962,                   // actual from Google Sheets AgedPayableSummaryByVendor
       inventory: 47000,
       ttmRevenue: 3321912,          // from Services TTM memo
       ttmNetIncome: 117379,         // from Services TTM memo (titan-bft-2026-02-21.md)
@@ -141,12 +141,12 @@ export default function App() {
     trueDscr: 1.40,                 // estimated: includes owner distributions
     debtService: 23066,
     ttmDebtService: 276792,
-    dso: 15,
+    dso: 24,                        // combined AR $518,512 / ($595,109 rev / 28 days)
     dio: 40,
-    dpo: 22,
-    ccc: 33,
-    ar: 322000,                     // estimated
-    ap: 293000,                     // estimated
+    dpo: 32,                        // combined AP $257,514 / ($223,146 COGS / 28 days)
+    ccc: 32,                        // 24 + 40 - 32
+    ar: 518512,                     // Distribution $379,512 (actual) + Services $139,000 (estimated); pre-IC elimination
+    ap: 257514,                     // Distribution $105,552 + Services $151,962 (both actual)
     inventory: 577000,              // estimated
   };
 
@@ -183,64 +183,64 @@ export default function App() {
     { month: 'Feb*', grossMargin: 63, ebitdaMargin: 39  },
   ];
 
-  // AR Aging Data — ESTIMATED from DSO calculations. Pull aging report to confirm.
+  // AR Aging Data — Distribution: actual from Google Sheets (Feb 21, 2026). Services: estimated.
   const arAging = {
     distribution: {
-      current: 0,
-      days1to30: 183000,
+      current: 5514,                // actual: current (not yet due)
+      days1to30: 372985,            // actual: 1–12 months bucket
       days31to60: 0,
       days61to90: 0,
-      days90plus: 0,
-      total: 183000,
-      intercompany: 168000,
-      intercompanyPct: 92,
+      days90plus: 1013,             // actual: 13–24 months (Anna AXEL)
+      total: 379512,                // actual from Google Sheets
+      intercompany: 262135,         // actual: TMS $169,346 + TMAS $74,778 + SXM $16,687 + others $324
+      intercompanyPct: 69,          // actual: 69% intercompany (vs 92% estimated)
     },
     services: {
-      current: 139000,
+      current: 139000,              // estimated — aging tab inaccessible
       days1to30: 0,
       days31to60: 0,
       days61to90: 0,
       days90plus: 0,
-      total: 139000,
+      total: 139000,                // estimated
       intercompany: 0,
       intercompanyPct: 0,
     },
   };
 
   const topCustomers = [
-    { name: 'Titan Marine Services (IC)',    amount: 168000, entity: 'Distribution', isIntercompany: true  },
-    { name: 'Titan Marine St Maarten (IC)',  amount: 15000,  entity: 'Distribution', isIntercompany: true  },
-    { name: 'External Customers',            amount: 0,      entity: 'Distribution', isIntercompany: false },
+    { name: 'Titan Marine Services (IC)',       amount: 169346, entity: 'Distribution', isIntercompany: true  },
+    { name: 'National Marine Suppliers',        amount: 92978,  entity: 'Distribution', isIntercompany: false },
+    { name: 'Titan Marine Air St Maarten (IC)', amount: 74778,  entity: 'Distribution', isIntercompany: true  },
   ];
 
-  // AP Aging Data — ESTIMATED. Pull aging report to confirm.
+  // AP Aging Data — actual from Google Sheets AgedPayableSummaryByVendor (both entities, Feb 21, 2026).
   const apAging = {
     distribution: {
-      current: 118000,
-      days1to30: 0,
+      current: 98631,               // actual: Frigomar $90,977 + SPI $3,908 + Vitrifrigo $1,955 + Pump Stop $1,792
+      days1to30: 6921,              // actual: Schenker Italia $5,334 + Encompass Marine $1,587
       days31to60: 0,
       days61to90: 0,
       days90plus: 0,
-      total: 118000,
+      total: 105552,                // actual from Google Sheets
       intercompany: 0,
       intercompanyPct: 0,
     },
     services: {
-      current: 0,
-      days1to30: 175000,
-      days31to60: 0,
+      current: 938,                 // actual: DHL SXM only
+      days1to30: 93427,             // actual: Titan Marine Distribution IC $83,297 + Titan Services SXM IC $7,128 + others
+      days31to60: 63227,            // actual: Titan Marine Distribution IC (still from Jan — unresolved)
       days61to90: 0,
-      days90plus: 0,
-      total: 175000,
-      intercompany: 172000,
-      intercompanyPct: 98,
+      days90plus: -5630,            // actual: Nicholas Thomas credit balance
+      total: 151962,                // actual from Google Sheets
+      intercompany: 146524,         // actual: 96.4% IC (Distribution owes IC = $83,297 + $63,227)
+      intercompanyPct: 96,
     },
   };
 
   const topVendors = [
-    { name: 'Titan Marine Distribution (IC)', amount: 172000, entity: 'Services',      isIntercompany: true  },
-    { name: 'Frigomar Srl',                   amount: 60000,  entity: 'Distribution',  isIntercompany: false },
-    { name: 'SXM Orders',                     amount: 8000,   entity: 'Services',      isIntercompany: false },
+    { name: 'Titan Marine Distribution (IC)', amount: 146524, entity: 'Services',      isIntercompany: true  },
+    { name: 'Frigomar Srl',                   amount: 90977,  entity: 'Distribution',  isIntercompany: false },
+    { name: 'Schenker Italia',                amount: 5334,   entity: 'Distribution',  isIntercompany: false },
   ];
 
   // YTD vs Prior Year
@@ -276,7 +276,7 @@ export default function App() {
   // Expense Watch — February anomalies
   const expenseSpikes = [
     { category: 'Operating Expenses',        entity: 'Distribution', current: 42012,  average: 77000,  variance: -45, status: 'LOW'    },
-    { category: 'COGS (margin-implied)',      entity: 'Services',     current: 82245,  average: 185000, variance: -56, status: 'LOW'    },
+    { category: 'COGS (margin-implied)',      entity: 'Services',     current: 82245,  average: 170000, variance: -52, status: 'LOW'    },
     { category: 'Operating Expenses',        entity: 'Services',     current: 99719,  average: 100000, variance:   0, status: 'NORMAL' },
   ];
 
@@ -291,17 +291,20 @@ export default function App() {
   };
 
   const intercompany = {
-    distributionARfromServices: 168000,
-    servicesAPtoDistribution: 172000,
-    netPosition: 4000,
+    distributionARfromServices: 262135,   // actual: all Services entities in Distribution AR aging
+    servicesAPtoDistribution: 146524,     // actual: Distribution owed in Services AP aging
+    netPosition: 15611,                   // $262,135 - $146,524 = $15,611 imbalance needs reconciliation
     direction: 'Services owes Distribution',
+    imbalanceFlag: true,                  // Distribution AR > Services AP by $15,611 — reconcile books
   };
 
   const actionItems = [
     { priority: 1, item: 'Verify Services COGS completeness — 74.3% gross margin vs 38.9% TTM average. Confirm all COGS accruals and labor costs are posted for February.', entity: 'Services', urgency: 'HIGH' },
     { priority: 2, item: 'Reconcile Distribution operating expenses — $42K vs $77K trailing average. Were all vendor bills, accruals, and allocations posted?', entity: 'Distribution', urgency: 'HIGH' },
-    { priority: 3, item: 'Analyze cash vs profit disconnect — $219K net income but only -$10K cash change. Pull full cash flow statement and review A/R, inventory, and A/P movements.', entity: 'Both', urgency: 'MEDIUM' },
-    { priority: 4, item: 'Pull AR aging report from Google Sheets to confirm estimated figures used in this dashboard.', entity: 'Both', urgency: 'LOW' },
+    { priority: 3, item: 'Reconcile intercompany imbalance — Distribution AR from Services = $262,135 but Services AP to Distribution = $146,524. Gap of $15,611 requires journal entry review.', entity: 'Both', urgency: 'HIGH' },
+    { priority: 4, item: 'Collect National Marine Suppliers $92,978 — largest external AR customer in Distribution, average 1 day past due. Confirm payment ETA.', entity: 'Distribution', urgency: 'MEDIUM' },
+    { priority: 5, item: 'Explain cash vs profit disconnect — $219K net income but only -$10K cash change. Distribution AR surged to $379K (was ~$183K estimated). Pull full cash flow statement.', entity: 'Both', urgency: 'MEDIUM' },
+    { priority: 6, item: 'Pull Services AR aging — AgedReceivablesSummaryByCustomer tab was inaccessible on Feb 21. Confirm Services AR balance and aging buckets.', entity: 'Services', urgency: 'LOW' },
   ];
 
   // ============================================================
@@ -458,7 +461,7 @@ export default function App() {
             <p className="font-serif font-bold text-sm text-amber-900">⚠️ Data Validation Required Before Distribution</p>
             <p className="text-[11px] text-amber-800 mt-1">
               February shows exceptional results (10x profit vs January). Two anomalies require confirmation: Services gross margin at 74.3% (vs 38.9% TTM avg) and Distribution expenses at $42K (vs $77K avg).
-              AR/AP aging figures in this report are <strong>estimated</strong> from DSO/DIO/DPO calculations — pull the actual aging reports from Google Sheets before sending to the client.
+              AR/AP aging figures: Distribution AR ($379K) and both entities' AP sourced directly from Google Sheets aging tabs. Services AR ($139K) is estimated — the aging tab was inaccessible on Feb 21. Verify Services AR before client distribution.
             </p>
           </div>
 
@@ -728,7 +731,7 @@ export default function App() {
 
           {/* Intercompany Position */}
           <div className="bg-stone-100 p-4 mb-6 border border-stone-300">
-            <h4 className="font-serif font-bold text-sm mb-2">Intercompany Position (estimated)</h4>
+            <h4 className="font-serif font-bold text-sm mb-2">Intercompany Position <span className="text-amber-600 font-normal text-[10px]">⚠️ Imbalance — Reconcile Required</span></h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-[11px]">
               <div>
                 <p className="text-stone-500">Distribution AR from Services</p>
@@ -744,7 +747,7 @@ export default function App() {
               </div>
             </div>
             <p className="text-[10px] text-stone-500 mt-2 italic">
-              Note: Intercompany figures estimated from prior month patterns. Pull AR/AP aging reports to confirm February balances.
+              ⚠️ Imbalance detected: Distribution AR shows $262,135 owed by Services entities; Services AP shows only $146,524 owed to Distribution — a $15,611 gap requiring journal entry reconciliation.
               Distribution sells parts/equipment to Services — intercompany represents the majority of both entities' AR and AP.
             </p>
           </div>
@@ -776,28 +779,27 @@ export default function App() {
               </div>
             </div>
             <div className="p-3 bg-stone-50 border border-stone-200 text-[11px]">
-              <p className="font-bold mb-2">Where did the $219K go? Likely causes (pull cash flow statement to confirm):</p>
+              <p className="font-bold mb-2">Where did the $219K go? A/R buildup is the primary driver — confirmed from Google Sheets:</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div>
                   <p className="font-medium text-amber-700">↑ Cash Uses (outflows):</p>
                   <ul className="list-disc list-inside space-y-1 mt-1 text-stone-600">
-                    <li>A/R increase — elevated Feb revenue not yet collected</li>
-                    <li>Inventory restocking (Distribution)</li>
+                    <li><strong>Distribution A/R: $379,512</strong> — the largest factor. Revenue was billed but not yet collected (69% intercompany). This alone explains the disconnect.</li>
+                    <li>Inventory restocking (Distribution est. $530K)</li>
                     <li>Debt service payments (~{formatCurrency(consolidated.debtService)}/mo)</li>
                     <li>Owner distributions (~{formatCurrency(ownerDraws.mtdTotal)})</li>
-                    <li>Year-end tax payments or accruals</li>
                   </ul>
                 </div>
                 <div>
                   <p className="font-medium text-green-700">↓ Cash Sources (inflows):</p>
                   <ul className="list-disc list-inside space-y-1 mt-1 text-stone-600">
-                    <li>Collections on January A/R</li>
-                    <li>A/P deferrals (Distribution expenses down)</li>
-                    <li>Operating cash from both entities</li>
+                    <li>Collections on January A/R (partially offsetting)</li>
+                    <li>Services AP deferred: $151,962 owed (96% IC — cash stays in group)</li>
+                    <li>Distribution AP relatively low: $105,552</li>
                   </ul>
                 </div>
               </div>
-              <p className="mt-2 italic text-stone-500">Action: Request full Statement of Cash Flows from Danika for February to confirm the balance sheet movements.</p>
+              <p className="mt-2 italic text-stone-500">Key insight: The $379K Distribution AR is the dominant balance sheet explanation. Once intercompany invoices clear, cash will improve. Request full Statement of Cash Flows from Danika to confirm all movements.</p>
             </div>
           </div>
 
@@ -807,12 +809,12 @@ export default function App() {
           {/* SECTION: AR/AP ANALYSIS */}
           {/* ============================================================ */}
 
-          <SectionHeader title="Receivables & Payables Analysis" subtitle="Aging, Concentration, and Collection Status — ESTIMATED (confirm with aging reports)" />
+          <SectionHeader title="Receivables & Payables Analysis" subtitle="Distribution AR + Both APs: Google Sheets Actual | Services AR: Estimated" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             {/* AR Aging */}
             <div>
-              <h4 className="font-serif font-bold text-sm mb-3">Accounts Receivable Aging <span className="text-amber-600 text-[10px] font-normal">(estimated)</span></h4>
+              <h4 className="font-serif font-bold text-sm mb-3">Accounts Receivable Aging <span className="text-green-700 text-[10px] font-normal">(Distribution: Google Sheets actual)</span> <span className="text-amber-600 text-[10px] font-normal">(Services: estimated)</span></h4>
               <div className="space-y-3">
                 {['distribution', 'services'].map((key) => {
                   const data = arAging[key];
@@ -846,7 +848,7 @@ export default function App() {
               </div>
 
               {/* Top Customers */}
-              <h5 className="font-serif font-bold text-xs mt-4 mb-2">Top Customers (estimated)</h5>
+              <h5 className="font-serif font-bold text-xs mt-4 mb-2">Top Customers (Distribution — Google Sheets actual)</h5>
               <div className="space-y-1">
                 {topCustomers.map((cust, idx) => (
                   <div key={idx} className="flex justify-between text-[10px] p-1 bg-stone-50">
@@ -862,7 +864,7 @@ export default function App() {
 
             {/* AP Aging */}
             <div>
-              <h4 className="font-serif font-bold text-sm mb-3">Accounts Payable Aging <span className="text-amber-600 text-[10px] font-normal">(estimated)</span></h4>
+              <h4 className="font-serif font-bold text-sm mb-3">Accounts Payable Aging <span className="text-green-700 text-[10px] font-normal">(both entities: Google Sheets actual)</span></h4>
               <div className="space-y-3">
                 {['distribution', 'services'].map((key) => {
                   const data = apAging[key];
@@ -900,7 +902,7 @@ export default function App() {
               </div>
 
               {/* Top Vendors */}
-              <h5 className="font-serif font-bold text-xs mt-4 mb-2">Top Vendors (estimated)</h5>
+              <h5 className="font-serif font-bold text-xs mt-4 mb-2">Top Vendors (Google Sheets actual)</h5>
               <div className="space-y-1">
                 {topVendors.map((vendor, idx) => (
                   <div key={idx} className="flex justify-between text-[10px] p-1 bg-stone-50">
