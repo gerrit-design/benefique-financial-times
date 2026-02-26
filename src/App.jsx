@@ -208,9 +208,9 @@ export default function App() {
   };
 
   const topCustomers = [
-    { name: 'Titan Marine Services (IC)',       amount: 169346, entity: 'Distribution', isIntercompany: true  },
-    { name: 'National Marine Suppliers',        amount: 92978,  entity: 'Distribution', isIntercompany: false },
-    { name: 'Titan Marine Air St Maarten (IC)', amount: 74778,  entity: 'Distribution', isIntercompany: true  },
+    { name: 'Division B Services (IC)',         amount: 169346, entity: 'Division A', isIntercompany: true  },
+    { name: 'National Service Suppliers',       amount: 92978,  entity: 'Division A', isIntercompany: false },
+    { name: 'Division B Regional Office (IC)',  amount: 74778,  entity: 'Division A', isIntercompany: true  },
   ];
 
   // AP Aging Data — actual from Google Sheets AgedPayableSummaryByVendor (both entities, Feb 21, 2026).
@@ -226,19 +226,19 @@ export default function App() {
       intercompanyPct: 0,
     },
     services: {
-      current: 938,                 // actual: DHL SXM only
-      days1to30: 93427,             // actual: Titan Marine Distribution IC $83,297 + Titan Services SXM IC $7,128 + others
-      days31to60: 63227,            // actual: Titan Marine Distribution IC (still from Jan — unresolved)
+      current: 938,                 // actual: DHL regional only
+      days1to30: 93427,             // actual: Division A Services IC $83,297 + Division B Regional IC $7,128 + others
+      days31to60: 63227,            // actual: Division A Services IC (still from Jan — unresolved)
       days61to90: 0,
-      days90plus: -5630,            // actual: Nicholas Thomas credit balance
+      days90plus: -5630,            // actual: Vendor credit balance
       total: 151962,                // actual from Google Sheets
-      intercompany: 146524,         // actual: 96.4% IC (Distribution owes IC = $83,297 + $63,227)
+      intercompany: 146524,         // actual: 96.4% IC (Division A owes IC = $83,297 + $63,227)
       intercompanyPct: 96,
     },
   };
 
   const topVendors = [
-    { name: 'Titan Marine Distribution (IC)', amount: 146524, entity: 'Services',      isIntercompany: true  },
+    { name: 'Division A Services (IC)', amount: 146524, entity: 'Division B',      isIntercompany: true  },
     { name: 'Frigomar Srl',                   amount: 90977,  entity: 'Distribution',  isIntercompany: false },
     { name: 'Schenker Italia',                amount: 5334,   entity: 'Distribution',  isIntercompany: false },
   ];
@@ -472,11 +472,11 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
             <div className="md:col-span-8">
               <Article
-                headline="Titan Posts Strongest Month on Record — $219K Net Income, 63% Gross Margins Signal Operational Breakthrough"
+                headline="Company Posts Strongest Month on Record — $219K Net Income, 63% Gross Margins Signal Operational Breakthrough"
                 byline="Benefique Fractional CFO Analysis | Data Pending Validation"
               >
                 <p className="first-letter:text-4xl md:first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:leading-none">
-                  <Dateline location={CONFIG.location} /> The Titan Group enters the final week of February
+                  <Dateline location={CONFIG.location} /> Acme Services Group enters the final week of February
                   with {formatCurrency(cashData.current)} in combined cash and consolidated net income of {formatCurrency(consolidated.netIncome)} —
                   a tenfold improvement over January's {formatCurrency(entityData[0].revenuePrior > 0 ? 22124 : 22124)} and the strongest profit month
                   in the group's recorded history. Both entities delivered exceptional performance across all margin metrics.
