@@ -15,10 +15,10 @@ export default function App() {
   // ============================================================
 
   const CONFIG = {
-    clientName: 'Titan Group',
-    clientSlug: 'titan',
-    industry: 'Marine & Industrial Services',
-    location: 'Hollywood, Florida',
+    clientName: 'Acme Services Group',
+    clientSlug: 'demo',
+    industry: 'Professional Services',
+    location: 'Broward County, Florida',
     reportDate: 'February 21, 2026',
     editionNumber: 2,
     periodStart: 'March 2025',
@@ -26,7 +26,7 @@ export default function App() {
     currentDay: 21,
     daysInMonth: 28,
     isMultiEntity: true,
-    entities: ['Distribution', 'Services'],
+    entities: ['Division A', 'Division B'],
     hasConsolidated: true,
     primaryColor: '#1e3a5f',
     secondaryColor: '#166534',
